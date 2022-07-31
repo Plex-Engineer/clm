@@ -15,7 +15,6 @@ import {
   Details,
 } from "hooks/useTransaction";
 import { Mixpanel } from "./../../mixpanel";
-import { estimateGasPrice } from "utils/nodeTransactions";
 
 
 //ENUM
