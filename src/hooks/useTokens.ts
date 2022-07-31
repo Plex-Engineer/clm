@@ -1,17 +1,17 @@
 import { formatEther } from "@ethersproject/units";
 import { useCalls, useCall, useEtherBalance } from "@usedapp/core";
 import { BigNumber, Contract } from "ethers";
-import { networkProperties } from "constants/networks";
+import { CantoMain, CantoTest } from "constants/networks";
 import {abi } from "constants/abi"
 import { ethers } from "ethers";
 import { CTOKEN, CTOKENS } from "constants/tokens";
 import { cTokensBase, mainnetBasecTokens } from "constants/lendingMarketTokens";
-import addresses from "constants/addresses"
+import addresses from "constants/addresses";
 
 export function useTokens(account: string | undefined, chainId : number): any[] | undefined {
 
-  const tokens : CTOKEN[] = networkProperties.find((val)=> val.chainId == chainId)?.tokens ?? mainnetBasecTokens;
-  const address = networkProperties.find((val)=> val.chainId == chainId)?.addresses ?? addresses.cantoMainnet; 
+  const tokens : CTOKEN[] = chainId == CantoTest.chainId ? cTokensBase : mainnetBasecTokens;
+  const address = chainId == CantoTest.chainId ? addresses.testnet : addresses.cantoMainnet
   
   const secondsPerBlock = 5.8;
   const blocksPerDay = 86400/secondsPerBlock;

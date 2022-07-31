@@ -1,22 +1,27 @@
-import { CantoMain, CantoTest} from "providers/index";
 import { cTokensBase, mainnetBasecTokens } from "./lendingMarketTokens";
-import addresses from "constants/addresses"
+import addresses from "constants/addresses";
 
-export const networkProperties = [
-    {
-      name: "Canto Testnet",
-      symbol: "CANTO",
-      chainId : CantoTest.chainId,
-      tokens : cTokensBase,
-      addresses: addresses.testnet,
-      chainInfo: CantoTest
-    },
-    {
-      name: "Canto Mainnet",
-      symbol: "CANTO",
-      chainId: CantoMain.chainId,
-      tokens: mainnetBasecTokens,
-      addresses: addresses.cantoMainnet,
-      chainInfo: CantoMain
-    }
-  ]
+
+export const CantoMain = {
+  name: "Canto Mainnet",
+  symbol: "CANTO",
+  chainId: 7700,
+  addresses: addresses.cantoMainnet,
+  tokens: mainnetBasecTokens,
+  rpcUrl: "https://evm.plexnode.wtf",
+  cosmosAPIEndpoint: "https://cosmos.plexnode.wtf/",
+  isTestChain: false,
+  blockExplorerUrl: "https://www.nothing.com",
+};
+
+export const CantoTest = {
+  name: "Canto Testnet",
+  symbol: "CANTO",
+  chainId: 740,
+  addresses: addresses.testnet,
+  tokens: cTokensBase,
+  rpcUrl: "https://eth.plexnode.wtf",
+  cosmosAPIEndpoint: "https://chain.plexnode.wtf/",
+  isTestChain: true,
+  blockExplorerUrl: "https://www.nothing.com",
+};

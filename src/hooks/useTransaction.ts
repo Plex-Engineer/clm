@@ -2,9 +2,9 @@ import { useContractFunction, useSendTransaction, useEthers } from "@usedapp/cor
 import {  Contract, utils } from "ethers";
 import {abi } from "constants/abi"
 import ADDRESSES from "constants/addresses";
-import { networkProperties } from "constants/networks";
 import { TOKENS } from "constants/tokens";
-import { CantoMain, CantoTest } from "providers/index";
+import { CantoTest } from "constants/networks";
+
 
 
 //Ex : DAI 50

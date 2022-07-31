@@ -1,7 +1,7 @@
 import { generateEndpointAccount, generateEndpointBroadcast, generatePostBodyBroadcast, generateEndpointProposals } from '@tharsis/provider';
 import { createTxRawEIP712, signatureToWeb3Extension, createTxMsgDelegate, createTxMsgVote } from '@tharsis/transactions';
 import { useEffect } from 'react';
-import { CantoTest, CantoMain } from "providers/index"
+import { CantoTestnet, CantoMainnet } from "providers/index"
 import ADDRESSES from 'constants/addresses';
 import { ethers } from 'ethers';
 
@@ -9,14 +9,14 @@ import { ethers } from 'ethers';
 
 
 export const nodeURL = (chain : number | undefined) => {    
-    if (chain == CantoTest.chainId) {
+    if (chain == CantoTestnet.chainId) {
         return ADDRESSES.testnet.NodeAPIEndpoint;
     }
     return ADDRESSES.cantoMainnet.NodeAPIEndpoint;
 }
 
 export async function estimateGasPrice () {
-    const provider = new ethers.providers.JsonRpcProvider(CantoMain.rpcUrl);
+    const provider = new ethers.providers.JsonRpcProvider(CantoMainnet.rpcUrl);
     return (await provider.getFeeData())
 }
 
