@@ -174,8 +174,9 @@ const details: Details = {
       <h2>{token.data.underlying.name}</h2>
 
       <h2>{
-        (token.borrowBalance > 0) ? `you cannot uncollateralize an asset that is currently being borrowed. please repay all ${token.data.underlying.name.toLowerCase()} before uncollateralizing.` : (ifLimit() && props.decollateralize) ? "80% of your borrow limit will be used. please repay borrow's or increase supply." :    
-        "each asset used as collateral increases your borrowing limit be careful, this can subject the asset to being seized in liquidation"}
+        (token.borrowBalance > 0) ? `you cannot uncollateralize an asset that is currently being borrowed. please repay all ${token.data.underlying.name.toLowerCase()} before uncollateralizing.` : (ifLimit() && props.decollateralize) ? "80% of your borrow limit will be used. please repay borrows or increase supply." :    
+        props.decollateralize ? "disabling an asset as collateral will remove it from your borrowing limit, and no longer subject it to liquidation" :
+        "enabling an asset as collateral increases your borrowing limit, but subjects the asset to liquidation"}
       </h2>
       <div
         style={{

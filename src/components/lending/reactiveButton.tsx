@@ -165,7 +165,7 @@ const ReactiveButton = ({
           transactionType == TrasanctionType.WITHDRAW) &&
         token.cash < formatedAmount
       ) {
-        return <DisabledButton>not enough liquidity</DisabledButton>;
+        return <DisabledButton>no {token.data.underlying.symbol} left</DisabledButton>;
       }
       if (transactionType == TrasanctionType.BORROW && token.borrowCap < formatedAmount) {
         return <DisabledButton>borrow cap has been reached</DisabledButton>
