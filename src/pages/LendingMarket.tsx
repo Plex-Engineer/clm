@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
-import { useEthers, useNotifications } from "@usedapp/core";
+import { useNotifications } from "@usedapp/core";
 import { useState, useEffect } from "react";
 import LendingTable from "../components/lending/lendingTable";
 import { useSetToken } from "providers/activeTokenContext";
@@ -8,12 +8,7 @@ import {
   addCTokens,
   addTokens,
   addNetwork,
-  checkNetworkVersion,
 } from "constants/addCantoToWallet";
-import { CantoTest, CantoMain } from "providers/index";
-import { ethers } from "ethers";
-
-// @ts-ignore
 import {
   SupplyRow,
   SupplyingRow,
@@ -31,6 +26,7 @@ import CypherText from "components/lending/CypherText";
 import { Details } from "hooks/useTransaction";
 import Popup from "reactjs-popup";
 import { CTOKEN } from "constants/tokens";
+import { useNetworkInfo } from "stores/networkInfo";
 
 const Container = styled.div`
   display: flex;
@@ -240,28 +236,22 @@ const LendingMarket = () => {
   const [isOpen, setIsOpen] = useState(false);
   //this is used to set the kind of modal to be opened
   const [modalType, setModalType] = useState<ModalType>(ModalType.LENDING);
-  //used to get the waller address if the user is logged in
-  const { account, chainId } = useEthers();
+  //intialize network store
+  const networkInfo = useNetworkInfo();
 
   const [supplyBalance, setSupplyBalance] = useState("00.00");
   const [borrowBalance, setborrowBalance] = useState("00.00");
   const { notifications } = useNotifications();
   const [notifs, setNotifs] = useState<any[]>([]);
-  const chain: number = chainId ?? 0;
-  const [isOnMain, setIsOnMain] = useState(true);
 
   useEffect(() => {
     addNetwork();
-    setTimeout(() => {
-      const onCantoNetwork = checkNetworkVersion();
-      if (!onCantoNetwork) {
+      if (!networkInfo.isConnected) {
         toast.error("please switch networks", {
           toastId: 1,
         });
       }
-      setIsOnMain(onCantoNetwork);
-    }, 2000);
-  }, [chain]);
+  }, [networkInfo.chainId]);
 
   useEffect(() => {
     notifications.forEach((item) => {
@@ -353,11 +343,11 @@ const LendingMarket = () => {
   }, [notifications]);
 
   //this is used to generate some statistics about the token from the getMarkets
-  Mixpanel.events.pageOpened("Lending Market", account);
+  Mixpanel.events.pageOpened("Lending Market", networkInfo.account);
   //this is used to set the active token for the context
   const setToken = useSetToken();
 
-  const allData = useTokens(account, chain);
+  const allData = useTokens(networkInfo.account, Number(networkInfo.chainId));
   let tokens: CTOKEN[] = allData?.[0];
   let stats = allData?.[1];
   const walletBalance = stats?.balance;
@@ -625,7 +615,7 @@ const LendingMarket = () => {
     // console.log(stats?.totalBorrow.toFixed(6))
   }, [tokens]);
 
-  return !isOnMain ? (
+  return !networkInfo.isConnected ? (
     <div style={{ color: "red", textAlign: "center" }}>
       <h1>please switch to canto mainnet</h1>
     </div>
@@ -645,18 +635,16 @@ const LendingMarket = () => {
         data={walletBalance}
       />
       <div className="flex-h">
-        <Button onClick={() => addNetwork()}>add network to metamask</Button>
-        <Button onClick={() => addTokens(chainId)}>
+        <Button onClick={() => addTokens(Number(networkInfo.chainId))}>
           add tokens to metamask
         </Button>
-        <Button onClick={() => addCTokens(chainId)}>
+        <Button onClick={() => addCTokens(Number(networkInfo.chainId))}>
           add cTokens to metamask
         </Button>
-        <br></br>
-        {chainId == CantoTest.chainId || chainId == CantoMain.chainId ? (
+        {networkInfo.isConnected ? (
           <Button
             onClick={() => {
-              if (account) {
+              if (networkInfo.account) {
                 openBalance();
               }
             }}

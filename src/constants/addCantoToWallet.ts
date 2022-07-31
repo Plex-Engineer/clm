@@ -1,12 +1,13 @@
 import { cTokensBase, mainnetBasecTokens } from "./lendingMarketTokens";
-import { CantoTest, CantoMain } from "providers/index"
+import { CantoTestnet, CantoMainnet } from "providers/index"
 import { CTOKEN } from "./tokens";
+import { ethers } from "ethers";
 
 export async function addTokens(chainId: number | undefined) {
-    if (!chainId || !(chainId == CantoMain.chainId || chainId == CantoTest.chainId)) {
+    if (!chainId || !(chainId == CantoMainnet.chainId || chainId == CantoTestnet.chainId)) {
         return;
     }
-    const baseTokens : CTOKEN[] = chainId == CantoTest.chainId ? cTokensBase : mainnetBasecTokens
+    const baseTokens : CTOKEN[] = chainId == CantoTestnet.chainId ? cTokensBase : mainnetBasecTokens
     try {
         baseTokens.forEach(async (token) => {
             if (token.underlying.name == "Canto") {
@@ -33,10 +34,10 @@ export async function addTokens(chainId: number | undefined) {
 }
 
 export async function addCTokens(chainId: number | undefined) {
-    if (!chainId || !(chainId == CantoMain.chainId || chainId == CantoTest.chainId)) {
+    if (!chainId || !(chainId == CantoMainnet.chainId || chainId == CantoTestnet.chainId)) {
         return;
     }
-    const baseTokens : CTOKEN[] = chainId == CantoTest.chainId ? cTokensBase : mainnetBasecTokens
+    const baseTokens : CTOKEN[] = chainId == CantoTestnet.chainId ? cTokensBase : mainnetBasecTokens
     try {
         baseTokens.forEach(async (token) => {
             // @ts-ignore
@@ -65,15 +66,15 @@ export function addNetwork() {
                 method: "wallet_addEthereumChain",
                 params: [
                     {
-                        chainId: "0x" + CantoMain.chainId.toString(16),
+                        chainId: "0x" + CantoMainnet.chainId.toString(16),
                         chainName: "Canto",
                         nativeCurrency: {
                             name: "Canto Coin",
                             symbol: "CANTO",
                             decimals: 18,
                         },
-                        rpcUrls: [CantoMain.rpcUrl],
-                        blockExplorerUrls: [CantoMain.blockExplorerUrl],
+                        rpcUrls: [CantoMainnet.rpcUrl],
+                        blockExplorerUrls: [CantoMainnet.blockExplorerUrl],
                     },
                 ],
             })
@@ -82,16 +83,30 @@ export function addNetwork() {
             });
 }
 
-export function checkNetworkVersion() : boolean {
+export function getChainIdandAccount(): string[] | undefined[] {
     //@ts-ignore
     if (window.ethereum) {
+      //@ts-ignore
+      return [window.ethereum.networkVersion, window.ethereum.selectedAddress];
+    }
+    return [undefined, undefined];
+  }
+  export async function connect() {
+      //@ts-ignore
+      if (window.ethereum) {
         //@ts-ignore
-        const currentChain = window.ethereum.networkVersion;
-        if (!(currentChain == CantoMain.chainId || currentChain == CantoTest.chainId)) {
-          return false;
-        } else {
-          return true;
-        }
-      } 
-    return false;
-}
+        window.ethereum.request({method: "eth_requestAccounts"});
+        addNetwork();
+      }
+    }
+  
+  export async function getAccountBalance(account: string | undefined) {
+      //@ts-ignore
+      if (window.ethereum) {
+          //@ts-ignore
+          let balance = await window.ethereum.request({method: 'eth_getBalance', params: [account, 'latest']})
+          return ethers.utils.formatEther(balance);
+      }
+      return "0";
+   
+  }

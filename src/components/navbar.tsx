@@ -1,13 +1,17 @@
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import menu from "../assets/menu.svg";
-import { ModalManager, ModalType } from "./modalManager";
-import { useEthers, useEtherBalance, useNetwork } from "@usedapp/core";
-import { formatEther } from "@ethersproject/units";
 import { formatBigNumber } from "utils";
-import { networkProperties } from "constants/networks";
+import {
+  connect,
+  getAccountBalance,
+  getChainIdandAccount,
+} from "constants/addCantoToWallet";
+
+import { useNetworkInfo } from "stores/networkInfo";
+
+
 interface propsStyle {
   didScroll: boolean;
 }
@@ -17,22 +21,22 @@ const Container = styled.div<propsStyle>`
   top: 0%;
   transition: all 0.1s ease-in-out;
   & > * {
-    flex : 1;
+    flex: 1;
   }
-border-bottom: ${(props) =>
+  border-bottom: ${(props) =>
     props.didScroll ? "1px solid var(--primary-color)" : "none"};
   background-color: ${(props) => (props.didScroll ? "#09221454" : "none")};
   backdrop-filter: ${(props) => (props.didScroll ? "blur(5px)" : "none")};
   z-index: 1;
-    justify-content: space-between;
-    align-items: center;
+  justify-content: space-between;
+  align-items: center;
   h1 {
-      /* text-shadow: none; */
-      color: var(--primary-color);
-      font-weight: 400;
-      text-align: center;
-      flex-grow: 2;
-    }
+    /* text-shadow: none; */
+    color: var(--primary-color);
+    font-weight: 400;
+    text-align: center;
+    flex-grow: 2;
+  }
   #logo {
     color: var(--primary-color);
     font-weight: bold;
@@ -41,7 +45,6 @@ border-bottom: ${(props) =>
     align-items: center;
     margin: 0 2rem;
     text-align: center;
-
   }
   ul {
     display: flex;
@@ -100,7 +103,7 @@ border-bottom: ${(props) =>
     color: var(--primary-color);
     transition: all 0.2s ease-in-out;
     &:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
       cursor: pointer;
       background-color: var(--primary-color);
       color: black;
@@ -155,7 +158,7 @@ border-bottom: ${(props) =>
         letter-spacing: -0.1em;
       }
     }
-    
+
     /* ul {
     display: flex;
     justify-content: center;
@@ -171,7 +174,7 @@ border-bottom: ${(props) =>
       display: block;
       margin-right: 1rem;
     }
-    
+
     button {
       /* display: none; */
       background-color: var(--primary-color);
@@ -181,17 +184,6 @@ border-bottom: ${(props) =>
     }
   }
 `;
-
-function getName(value : string){
-switch(value){
-  case "convert":
-    return "convert coin"
-    break
-  default:
-    return value
-}
-}
-
 
 const Glitch = styled.p`
   & {
@@ -203,7 +195,7 @@ const Glitch = styled.p`
 
     position: relative;
     text-shadow: 0.05em 0 0 #00ffd5, -0.03em -0.04em 0 #1d7407,
-        0.025em 0.04em 0 #8bff9f;
+      0.025em 0.04em 0 #8bff9f;
     animation: glitch 725ms infinite;
   }
 
@@ -260,18 +252,40 @@ const Glitch = styled.p`
 `;
 
 const NavBar = () => {
-  const { account, activateBrowserWallet, chainId } = useEthers();
-  const chain : Number= chainId ?? 1;
-  const location = useLocation();
-  const isConnected = account !== undefined;
+  const netWorkInfo = useNetworkInfo();
 
-  async function connect() {
-    // setIsModalOpen(true);
-    activateBrowserWallet();
+  useEffect(() => {
+    const [chainId, account] = getChainIdandAccount();
+    netWorkInfo.setChainId(chainId);
+    netWorkInfo.setAccount(account);
+  },[])
+  
+  //@ts-ignore
+  if (window.ethereum) {
+    //@ts-ignore
+    window.ethereum.on("accountsChanged", () => {
+      window.location.reload();
+    });
+ 
+    //@ts-ignore
+    window.ethereum.on("networkChanged", () => {
+      window.location.reload();
+    });
   }
 
+  async function getBalance() {
+    if (netWorkInfo.account != undefined) {
+      netWorkInfo.setBalance(await getAccountBalance(netWorkInfo.account))
+    }
+  }
+
+  useEffect(() => {
+    getBalance();
+  },[netWorkInfo.account])
+
+
+
   const [colorChange, setColorchange] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const changeNavbarColor = () => {
     if (window.scrollY >= 2) {
@@ -282,28 +296,26 @@ const NavBar = () => {
   };
   window.addEventListener("scroll", changeNavbarColor);
 
-  const balance = useEtherBalance(account) ?? 0;
 
   return (
     <Container didScroll={colorChange}>
-
       <div id="logo">
-      <a href="https://canto.io" style={{
-        display : "flex"
-      }}>
-
+        <a
+          href="https://canto.io"
+          style={{
+            display: "flex",
+          }}
+        >
           <img src={logo} alt="Canto" />
 
-        <Glitch>
-          <span aria-hidden="true">Canto</span>
-          Canto
-          <span aria-hidden="true">Canto</span>
-        </Glitch>
-      </a>
-
+          <Glitch>
+            <span aria-hidden="true">Canto</span>
+            Canto
+            <span aria-hidden="true">Canto</span>
+          </Glitch>
+        </a>
       </div>
       <h1>lending</h1>
-
       <input
         type="checkbox"
         name="nav-menu"
@@ -313,43 +325,30 @@ const NavBar = () => {
           setIsNavOpen(!isNavOpen);
         }}
       />
-      {isConnected ? (
-        <button onClick={()=>{
-          // setIsModalOpen(true)
-        }}>
-          {formatBigNumber(formatEther(balance))}&nbsp;  
-          <span style={{
-            fontWeight : "600",
-            
-          }}>{networkProperties.find((val)=> val.chainId == chain)?.symbol ?? "ETH"}</span> |{" "}
-          {account?.substring(0, 5) + ".."}
-          
+      {netWorkInfo.isConnected && netWorkInfo.account ? (
+        <button
+          onClick={() => {
+            // setIsModalOpen(true)
+          }}
+        >
+          {formatBigNumber(netWorkInfo.balance)}&nbsp;
+          <span
+            style={{
+              fontWeight: "600",
+            }}
+          >
+            CANTO
+          </span>{" "}
+          | {netWorkInfo.account?.substring(0, 5) + ".."}
         </button>
       ) : (
         <button onClick={() => connect()}>connect wallet</button>
       )}
-
-      {/* <WalletButton/> */}
-
-      <ModalManager
-        isOpen={isModalOpen}
-        modalType={ModalType.BALANCE}
-        onClose={() => {
-          setIsModalOpen(false);
-        }}
-      />
-      <label htmlFor="menu-checkbox" style={{display : "none"}}>
+      <label htmlFor="menu-checkbox" style={{ display: "none" }}>
         <img id="nav-menu" src={menu} />
       </label>
     </Container>
   );
-
-  function getSymbol(chainID : Number){
-    switch(chainID){
-
-    }
-  }
 };
-
 
 export default NavBar;
