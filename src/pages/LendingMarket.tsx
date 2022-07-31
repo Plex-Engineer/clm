@@ -641,7 +641,6 @@ const LendingMarket = () => {
         <Button onClick={() => addCTokens(Number(networkInfo.chainId))}>
           add cTokens to metamask
         </Button>
-        <br></br>
         {networkInfo.isConnected ? (
           <Button
             onClick={() => {
