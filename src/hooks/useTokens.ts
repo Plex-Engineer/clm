@@ -154,6 +154,7 @@ export function useTokens(account: string | undefined, chainId : number): any[] 
   if (!tokens) {
     return undefined;
   }
+  console.log(results)
 
   if (chuckSize > 0 && results?.[0] != undefined && !results?.[0].error) {
     processedTokens = array_chunks(results, chuckSize);
