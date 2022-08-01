@@ -10,6 +10,7 @@ import {
 } from "constants/addCantoToWallet";
 
 import { useNetworkInfo } from "stores/networkInfo";
+import { BurgerMenu } from "./modals/menu";
 
 
 interface propsStyle {
@@ -300,6 +301,7 @@ const NavBar = () => {
   return (
     <Container didScroll={colorChange}>
       <div id="logo">
+        <BurgerMenu/>
         <a
           href="https://canto.io"
           style={{
