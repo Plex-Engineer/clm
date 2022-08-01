@@ -118,7 +118,7 @@ const Hero = styled.div`
   align-items: center;
   width: 100%;
   /* min-height: 20rem; */
-  margin-top: 9rem;
+  margin-top: 5rem;
   margin-bottom: 0rem;
   div {
     width: 50%;
@@ -759,7 +759,7 @@ const LendingMarket = () => {
         <div
           className="tables"
           style={{
-            marginBottom: "4rem",
+            marginBottom: "1rem",
           }}
         >
           <div className="left">
