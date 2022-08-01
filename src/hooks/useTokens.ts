@@ -12,6 +12,7 @@ export function useTokens(account: string | undefined, chainId : number): any[] 
 
   const tokens : CTOKEN[] = chainId == CantoTest.chainId ? cTokensBase : mainnetBasecTokens;
   const address = chainId == CantoTest.chainId ? addresses.testnet : addresses.cantoMainnet
+  console.log(chainId)
   
   const secondsPerBlock = 5.8;
   const blocksPerDay = 86400/secondsPerBlock;

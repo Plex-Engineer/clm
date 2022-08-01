@@ -502,7 +502,7 @@ export const CTOKENS = {
         CCANTO:
         {
             symbol: 'cCANTO',
-            name: 'CCANTO',
+            name: 'CCanto',
             decimals: decimals.cCANTO,
             address: addresses.cantoMainnet.CCanto,
             underlying: TOKENS.cantoMainnet.CANTO
