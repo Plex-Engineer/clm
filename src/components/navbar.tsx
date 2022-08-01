@@ -11,6 +11,8 @@ import {
 
 import { useNetworkInfo } from "stores/networkInfo";
 import { BurgerMenu } from "./modals/menu";
+import { useEthers } from "@usedapp/core";
+
 
 
 interface propsStyle {
@@ -243,6 +245,7 @@ const Glitch = styled.p`
 
 const NavBar = () => {
   const netWorkInfo = useNetworkInfo();
+  const {activateBrowserWallet} = useEthers();
 
   useEffect(() => {
     const [chainId, account] = getChainIdandAccount();
@@ -334,7 +337,8 @@ const NavBar = () => {
           | {netWorkInfo.account?.substring(0, 5) + ".."}
         </button>
       ) : (
-        <button onClick={() => connect()}>connect wallet</button>
+        // <button onClick={() => connect()}>connect wallet</button>
+        <button onClick={() => activateBrowserWallet()}>connect wallet</button>
       )}
       </div>
      
