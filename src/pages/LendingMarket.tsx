@@ -621,11 +621,6 @@ const LendingMarket = () => {
     </div>
   ) : (
     <Container className="lendingMarket">
-      <Helmet>
-        <meta charSet="utf-8" />
-
-        <title>Canto - Lending Market</title>
-      </Helmet>
       <ModalManager
         isOpen={isOpen}
         modalType={modalType}
