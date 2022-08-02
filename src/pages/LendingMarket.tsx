@@ -32,7 +32,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   color: #fff;
-  margin: 2rem 6rem; //TODO: make this dynamic
+  margin: 2rem 1.5rem; //TODO: make this dynamic
   .typing {
     color: var(--primary-color);
     margin: 2rem 4rem;
@@ -63,11 +63,11 @@ const Container = styled.div`
   .flex-h {
     display: flex;
     margin: 0;
-    justify-content: space-evenly;
+    justify-content: right;
     flex-wrap: wrap;
     button {
       margin: 0;
-      width: 20rem;
+      width: 15rem;
     }
   }
 
@@ -144,7 +144,7 @@ const Hero = styled.div`
   }
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   font-weight: 300;
   font-size: 18px;
   background-color: black;
@@ -630,12 +630,6 @@ const LendingMarket = () => {
         data={walletBalance}
       />
       <div className="flex-h">
-        <Button onClick={() => addTokens(Number(networkInfo.chainId))}>
-          add tokens to metamask
-        </Button>
-        <Button onClick={() => addCTokens(Number(networkInfo.chainId))}>
-          add cTokens to metamask
-        </Button>
         {networkInfo.isConnected ? (
           <Button
             onClick={() => {

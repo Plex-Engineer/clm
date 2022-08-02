@@ -1,4 +1,6 @@
+import { addCTokens, addTokens } from "constants/addCantoToWallet";
 import { slide as Menu } from "react-burger-menu";
+
 
 const BurgerStyles = {
   paddingTop: "-1000px",
@@ -29,7 +31,7 @@ const BurgerStyles = {
   },
   bmMenu: {
     background: "#000000",
-    padding: "2.5em 1.5em 0",
+    padding: "0em .5em 0",
     fontSize: "1.15em",
   },
   bmMorphShape: {
@@ -51,7 +53,16 @@ const BurgerStyles = {
   },
 };
 
-export const BurgerMenu = () => {
+const MenuButtonStyles = {
+  padding: "0.2rem 2rem",
+  width: "80%",
+}
+
+interface BurgerMenuProps {
+  chainId: number;
+}
+
+export const BurgerMenu = ({chainId}: BurgerMenuProps) => {
   return (
     <Menu styles={BurgerStyles}>
       <h2>terminal</h2>
@@ -62,6 +73,12 @@ export const BurgerMenu = () => {
       <a id="lending" className="menu-item" href="https://lending.canto.io">lending</a>
       <a id="lpInterface" className="menu-item" href="https://lp.canto.io">lp interface</a>
       <a id="staking" className="menu-item" href="https://staking.canto.io">staking</a>
+      <button style={MenuButtonStyles} onClick={() => {
+        addTokens(chainId);
+      }}>add tokens</button>
+      <button style={MenuButtonStyles} onClick={() => {
+        addCTokens(chainId);
+      }}>add cTokens</button>
     </Menu>
   );
 };
