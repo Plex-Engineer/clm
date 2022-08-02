@@ -300,7 +300,7 @@ const NavBar = () => {
   return (
     <Container didScroll={colorChange}>
       <div id="logo">
-        <BurgerMenu/>
+        <BurgerMenu chainId={Number(netWorkInfo.chainId)}/>
         <a
           href="https://canto.io"
           style={{
