@@ -75,7 +75,7 @@ export const TOKENS = {
         },
         WCANTO:
         {
-            symbol: "CANTO",
+            symbol: "WCANTO",
             name: "WCanto",
             decimals: decimals.CANTO,
             address: addresses.testnet.WCANTO,
@@ -211,7 +211,7 @@ export const TOKENS = {
         },
         WCANTO:
         {
-            symbol: "CANTO",
+            symbol: "WCANTO",
             name: "WCanto",
             decimals: decimals.CANTO,
             address: addresses.cantoMainnet.WCANTO,

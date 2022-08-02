@@ -2,6 +2,7 @@ import { cTokensBase, mainnetBasecTokens } from "./lendingMarketTokens";
 import { CantoTestnet, CantoMainnet } from "providers/index"
 import { CTOKEN } from "./tokens";
 import { ethers } from "ethers";
+import { TOKENS } from "./tokens";
 
 export async function addTokens(chainId: number | undefined) {
     if (!chainId || !(chainId == CantoMainnet.chainId || chainId == CantoTestnet.chainId)) {
@@ -31,6 +32,26 @@ export async function addTokens(chainId: number | undefined) {
     } catch (error) {
         console.log(error);
     }
+    const WCANTO = chainId == CantoTestnet.chainId ? TOKENS.cantoTestnet.WCANTO : TOKENS.cantoMainnet.WCANTO;
+    try {
+            // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+            // @ts-ignore
+            await ethereum.request({
+                method: "wallet_watchAsset",
+                params: {
+                    type: "ERC20", // Initially only supports ERC20, but eventually more!
+                    options: {
+                        address: WCANTO.address, // The address that the token is at.
+                        symbol: WCANTO.symbol, // A ticker symbol or shorthand, up to 5 chars.
+                        decimals: WCANTO.decimals, // The number of decimals in the token
+                        image: WCANTO.icon, // A string url of the token logo
+                    },
+                },
+            });
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 export async function addCTokens(chainId: number | undefined) {
