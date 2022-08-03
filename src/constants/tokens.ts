@@ -64,8 +64,8 @@ export const TOKENS = {
     cantoTestnet: {
         CANTO:
         {
-            symbol: 'CANTO',
-            name: 'Canto',
+            symbol: "CANTO",
+            name: "Canto",
             decimals: decimals.CANTO,
             address: addresses.testnet.ETH,
             isERC20: false,
@@ -200,8 +200,8 @@ export const TOKENS = {
     cantoMainnet: {
         CANTO:
         {
-            symbol: 'CANTO',
-            name: 'Canto',
+            symbol: "CANTO",
+            name: "Canto",
             decimals: decimals.CANTO,
             address: '0x0000000000000000000000000000000000000000',
             isERC20: false,

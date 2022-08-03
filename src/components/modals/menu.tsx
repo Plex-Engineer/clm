@@ -54,8 +54,8 @@ const BurgerStyles = {
 };
 
 const MenuButtonStyles = {
-  padding: "0.2rem 2rem",
-  width: "80%",
+  padding: "0.2rem 1rem",
+  width: "85%",
 }
 
 interface BurgerMenuProps {
@@ -75,10 +75,10 @@ export const BurgerMenu = ({chainId}: BurgerMenuProps) => {
       <a id="staking" className="menu-item" href="https://staking.canto.io">staking</a>
       <button style={MenuButtonStyles} onClick={() => {
         addTokens(chainId);
-      }}>add tokens</button>
+      }}>import tokens</button>
       <button style={MenuButtonStyles} onClick={() => {
         addCTokens(chainId);
-      }}>add cTokens</button>
+      }}>import cTokens</button>
     </Menu>
   );
 };

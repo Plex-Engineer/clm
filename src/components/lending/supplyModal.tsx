@@ -314,7 +314,6 @@ const SupplyModal = ( { onClose } : IProps) => {
               setAmount(val.toString());
               //Check that max was actually 100% of the balance
               token.supplyBalance > val ? setMax(false) : setMax(true);
-              console.log(token.data.underlying.decimals, val)
               setInputState(InputState.CONFIRM);
             }
           }}

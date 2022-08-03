@@ -182,7 +182,6 @@ const ReactiveButton = ({
                     value: ethers.utils.parseUnits(truncateByDecimals(amount, token.data.underlying.decimals), token.data.underlying.decimals).sub(gas),
                   });
                 } else {
-                  console.log(truncateByDecimals(amount, token.data.underlying.decimals))
                   supplySend(ethers.utils.parseUnits(truncateByDecimals(amount, token.data.underlying.decimals), token.data.underlying.decimals));
                 }
                 Mixpanel.events.lendingMarketActions.supply(

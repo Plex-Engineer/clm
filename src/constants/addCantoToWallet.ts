@@ -1,6 +1,6 @@
 import { cTokensBase, mainnetBasecTokens } from "./lendingMarketTokens";
 import { CantoTestnet, CantoMainnet } from "providers/index"
-import { CTOKEN } from "./tokens";
+import { CTOKEN, CTOKENS } from "./tokens";
 import { ethers } from "ethers";
 import { TOKENS } from "./tokens";
 
@@ -8,75 +8,56 @@ export async function addTokens(chainId: number | undefined) {
     if (!chainId || !(chainId == CantoMainnet.chainId || chainId == CantoTestnet.chainId)) {
         return;
     }
-    const baseTokens : CTOKEN[] = chainId == CantoTestnet.chainId ? cTokensBase : mainnetBasecTokens
-    try {
-        baseTokens.forEach(async (token) => {
-            if (token.underlying.name == "Canto") {
-                return
-            }
-            // wasAdded is a boolean. Like any RPC method, an error may be thrown.
-            // @ts-ignore
-            await ethereum.request({
+    const tokens = chainId == CantoTestnet.chainId ? TOKENS.cantoTestnet : TOKENS.cantoMainnet;
+    for (const [name, tokenObj] of Object.entries(tokens)) {
+        try {
+            if (tokenObj.name != "Canto") {
+            //@ts-ignore
+            ethereum.request({
                 method: "wallet_watchAsset",
                 params: {
                     type: "ERC20", // Initially only supports ERC20, but eventually more!
                     options: {
-                        address: token.underlying.address, // The address that the token is at.
-                        symbol: token.underlying.symbol.slice(0,11), // A ticker symbol or shorthand, up to 5 chars.
-                        decimals: token.underlying.decimals, // The number of decimals in the token
-                        image: token.underlying.icon, // A string url of the token logo
+                        address: tokenObj.address, // The address that the token is at.
+                        symbol: tokenObj.symbol.slice(0,11), // A ticker symbol or shorthand, up to 5 chars.
+                        decimals: tokenObj.decimals, // The number of decimals in the token
+                        image: tokenObj.icon, // A string url of the token logo
                     },
-                },
-            });
-        });
-    } catch (error) {
-        console.log(error);
+                }
+            })
+        }
+        } catch (error) {
+            console.log(error)
+        }
     }
-    const WCANTO = chainId == CantoTestnet.chainId ? TOKENS.cantoTestnet.WCANTO : TOKENS.cantoMainnet.WCANTO;
-    try {
-            // wasAdded is a boolean. Like any RPC method, an error may be thrown.
-            // @ts-ignore
-            await ethereum.request({
-                method: "wallet_watchAsset",
-                params: {
-                    type: "ERC20", // Initially only supports ERC20, but eventually more!
-                    options: {
-                        address: WCANTO.address, // The address that the token is at.
-                        symbol: WCANTO.symbol, // A ticker symbol or shorthand, up to 5 chars.
-                        decimals: WCANTO.decimals, // The number of decimals in the token
-                        image: WCANTO.icon, // A string url of the token logo
-                    },
-                },
-            });
-    } catch (error) {
-        console.log(error);
-    }
-
 }
 
 export async function addCTokens(chainId: number | undefined) {
     if (!chainId || !(chainId == CantoMainnet.chainId || chainId == CantoTestnet.chainId)) {
         return;
     }
-    const baseTokens : CTOKEN[] = chainId == CantoTestnet.chainId ? cTokensBase : mainnetBasecTokens
-    try {
-        baseTokens.forEach(async (token) => {
-            // @ts-ignore
-            await ethereum.request({
+    const cTokens = chainId == CantoTestnet.chainId ? CTOKENS.cantoTestnet : CTOKENS.cantoMainnet;
+
+    for (const [name, tokenObj] of Object.entries(cTokens)) {
+        try {
+            if (tokenObj.name != "Canto") {
+            //@ts-ignore
+            ethereum.request({
                 method: "wallet_watchAsset",
                 params: {
                     type: "ERC20", // Initially only supports ERC20, but eventually more!
                     options: {
-                        address: token.address, // The address that the token is at.
-                        symbol: token.symbol.slice(0,11), // A ticker symbol or shorthand, up to 5 chars.
-                        decimals: token.decimals, // The number of decimals in the token
-                        image: token.underlying.icon, // A string url of the token logo
+                        address: tokenObj.address, // The address that the token is at.
+                        symbol: tokenObj.symbol.slice(0,11), // A ticker symbol or shorthand, up to 5 chars.
+                        decimals: tokenObj.decimals, // The number of decimals in the token
+                        image: tokenObj.underlying.icon, // A string url of the token logo
                     },
-                },
-            });
-        });
-    } catch (error) {
-        console.log(error);
+                }
+            })
+        }
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 

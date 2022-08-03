@@ -348,7 +348,6 @@ const LendingMarket = () => {
   let tokens: CTOKEN[] = allData?.[0];
   let stats = allData?.[1];
   const walletBalance = stats?.balance;
-  console.log(tokens)
 
   function openModalLending() {
     setModalType(ModalType.LENDING);
