@@ -180,8 +180,9 @@ export function useTokens(account: string | undefined, chainId : number): any[] 
       const borrowAPY = getBorrowAPY(Number(formatEther(tokenData[6][0])));
       const compSpeed = Number(formatEther(tokenData[11][0]));
       const distAPY = getDistributionAPY(compSpeed, cash, Number(price), Number(formatEther(results[results.length-1]?.value[0])));
-      // const borrowCap = formatBalanceFromDecimals([13][0], tokens[idx].decimals) == 0 ? Number.MAX_SAFE_INTEGER : formatBalanceFromDecimals([13][0], tokens[idx].decimals);
-      const borrowCap = Number.MAX_SAFE_INTEGER;
+      // const borrowCap1 = formatBalanceFromDecimals([13][0], tokens[idx].decimals) == 0 ? Number.MAX_SAFE_INTEGER : formatBalanceFromDecimals([13][0], tokens[idx].decimals);
+      const borrowCap = ethers.BigNumber.from(tokenData[12][0]).eq(ethers.BigNumber.from("0")) ? Number.MAX_SAFE_INTEGER : formatUnits(tokenData[12][0], tokens[idx].underlying.decimals);
+      console.log("🚀 ~ file: useTokens.ts ~ line 185 ~ val ~ tokenData[12][0]", tokenData[12][0])
       return {
         data: tokens?.[idx],
         wallet: account,
