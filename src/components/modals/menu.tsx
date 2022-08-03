@@ -1,5 +1,6 @@
 import { addCTokens, addTokens } from "constants/addCantoToWallet";
 import { slide as Menu } from "react-burger-menu";
+import { addCantoToKeplr } from "utils/addKeplr";
 
 
 const BurgerStyles = {
@@ -79,6 +80,11 @@ export const BurgerMenu = ({chainId}: BurgerMenuProps) => {
       <button style={MenuButtonStyles} onClick={() => {
         addCTokens(chainId);
       }}>import cTokens</button>
+      <button style={MenuButtonStyles} onClick={() => {
+        addCantoToKeplr();
+      }}>add canto to keplr</button>
+
     </Menu>
   );
 };
+
