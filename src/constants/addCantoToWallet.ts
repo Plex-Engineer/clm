@@ -27,7 +27,7 @@ export async function addTokens(chainId: number | undefined) {
             })
         }
         } catch (error) {
-            console.log(error)
+            // console.log(error)
         }
     }
 }
@@ -56,7 +56,7 @@ export async function addCTokens(chainId: number | undefined) {
             })
         }
         } catch (error) {
-            console.log(error)
+            // console.log(error)
         }
     }
 }
@@ -81,7 +81,7 @@ export function addNetwork() {
                 ],
             })
             .catch((error: any) => {
-                console.log(error);
+                // console.log(error);
             });
 }
 
