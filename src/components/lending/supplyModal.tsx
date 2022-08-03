@@ -308,12 +308,13 @@ const SupplyModal = ( { onClose } : IProps) => {
               //check if we are in the withdraw state
               let val = !token.collateral? value :
                 withdrawAmount() < token.supplyBalance
-                  ? withdrawAmount()
+                  ? withdrawAmount().toFixed(token.data.underlying.decimals)
                   : value;
-              val = Number(val) < 0 ? 0 : val;
+              val = Number(val) < 0 ? "0" : val;
               setAmount(val.toString());
               //Check that max was actually 100% of the balance
               token.supplyBalance > val ? setMax(false) : setMax(true);
+              console.log(token.data.underlying.decimals, val)
               setInputState(InputState.CONFIRM);
             }
           }}
