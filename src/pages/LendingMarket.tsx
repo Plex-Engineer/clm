@@ -242,7 +242,6 @@ const LendingMarket = () => {
   const [notifs, setNotifs] = useState<any[]>([]);
 
   useEffect(() => {
-    addNetwork();
       if (!networkInfo.isConnected) {
         toast.error("please switch networks", {
           toastId: 1,

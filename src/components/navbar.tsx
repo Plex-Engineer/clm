@@ -12,6 +12,7 @@ import {
 import { useNetworkInfo } from "stores/networkInfo";
 import { BurgerMenu } from "./modals/menu";
 import { useEthers } from "@usedapp/core";
+import { CantoMain } from "constants/networks";
 
 
 
@@ -258,7 +259,7 @@ const NavBar = () => {
   the user must activateBorwserWallet to create a provider for themselves that multicall can use to instantiate a provider for them
   !! networkInfo.account may have an account, but useEthers account must be checked
   */
-   const {activateBrowserWallet, account} = useEthers();
+   const {activateBrowserWallet, account, switchNetwork} = useEthers();
 
   //@ts-ignore
   if (window.ethereum) {
@@ -345,7 +346,11 @@ const NavBar = () => {
         </button>
       ) : (
         // <button onClick={() => connect()}>connect wallet</button>
-        <button onClick={() => activateBrowserWallet()}>connect wallet</button>
+        <button onClick={() => {
+          activateBrowserWallet();
+          switchNetwork(CantoMain.chainId)
+        }
+        }>connect wallet</button>
       )}
       </div>
      
