@@ -110,7 +110,6 @@ const SupplyModal = ( { onClose } : IProps) => {
 
   
   const [amount, setAmount] = useState("");
-  const [finalAmount, setFinalAmount] = useState("");
 
   useEffect(() => {
     if(['Success' , 'Fail' , 'Exception'].includes(
@@ -228,14 +227,14 @@ const SupplyModal = ( { onClose } : IProps) => {
         />
         {/* supply */}
         <LendingField
-          onMax={(value) => {
+          onMax={(value : string) => {
             if (inputState != InputState.ENABLE) {
-              const val = Number(value);
-              if (val > 0) setInputState(InputState.CONFIRM);
+              const val = value;
+              if (Number(val) > 0) setInputState(InputState.CONFIRM);
               else {
                 setInputState(InputState.ENTERAMOUNT);
               }
-              setAmount(val.toString());
+              setAmount(val);
               setMax(true)
             }
           }}
