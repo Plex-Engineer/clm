@@ -255,7 +255,7 @@ const NavBar = () => {
     netWorkInfo.setChainId(chainId);
     netWorkInfo.setAccount(account);
     //@ts-ignore
-  },[window.ethereum])
+  },[window.ethereum?.selectedAddress, window.ethereum?.networkVersion])
 
    /*
   the account is the dapp provider that usedapp will use to make multicalls
