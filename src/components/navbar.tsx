@@ -252,6 +252,7 @@ const NavBar = () => {
     console.log(chainId, account, "update")
     netWorkInfo.setChainId(chainId);
     netWorkInfo.setAccount(account);
+    //@ts-ignore
   },[window.ethereum])
 
    /*
