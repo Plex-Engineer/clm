@@ -259,10 +259,12 @@ const NavBar = () => {
   the user must activateBorwserWallet to create a provider for themselves that multicall can use to instantiate a provider for them
   !! networkInfo.account may have an account, but useEthers account must be checked
   */
-   const {activateBrowserWallet, account, switchNetwork} = useEthers();
+   const {activateBrowserWallet, account, switchNetwork, chainId} = useEthers();
 
-   console.log(netWorkInfo.chainId + "account" + account)
-   console.log("network info account" + netWorkInfo.account)
+   console.log("usedapp" + chainId + "account" + account)
+   console.log("window.ethereum" + netWorkInfo.chainId + "network info account" + netWorkInfo.account)
+   //@ts-ignore
+   console.log(window.ethereum)
 
   //@ts-ignore
   if (window.ethereum) {
