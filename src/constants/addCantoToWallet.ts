@@ -88,9 +88,11 @@ export function addNetwork() {
 export function getChainIdandAccount(): string[] | undefined[] {
     //@ts-ignore
     if (window.ethereum) {
+        console.log("window ethereum was detected")
       //@ts-ignore
       return [window.ethereum.networkVersion, window.ethereum.selectedAddress];
     }
+    console.log("window ethereum not detected")
     return [undefined, undefined];
   }
   export async function connect() {
