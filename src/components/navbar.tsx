@@ -261,6 +261,9 @@ const NavBar = () => {
   */
    const {activateBrowserWallet, account, switchNetwork} = useEthers();
 
+   console.log(netWorkInfo.chainId + "account" + account)
+   console.log("network info account" + netWorkInfo.account)
+
   //@ts-ignore
   if (window.ethereum) {
     //@ts-ignore
