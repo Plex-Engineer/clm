@@ -14,6 +14,8 @@ import bgNoise from "assets/bg-noise.gif";
 import "react-toastify/dist/ReactToastify.css";
 import {ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
+import { CantoNav } from "components/cantoNav";
+
 
 
 //Styling
@@ -137,7 +139,8 @@ function App() {
           <ScanlinesOverlay />
           <GlobalStyles />
           <OverlayLines/>
-          <NavBar/> 
+          {/* <NavBar/>  */}
+          <CantoNav/>
           <Routes>
             <Route path="/" element={<LendingMarket />} />
           </Routes>
