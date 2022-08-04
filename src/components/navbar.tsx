@@ -249,9 +249,10 @@ const NavBar = () => {
 
   useEffect(() => {
     const [chainId, account] = getChainIdandAccount();
+    console.log(chainId, account, "update")
     netWorkInfo.setChainId(chainId);
     netWorkInfo.setAccount(account);
-  },[])
+  },[window.ethereum])
 
    /*
   the account is the dapp provider that usedapp will use to make multicalls
@@ -261,10 +262,10 @@ const NavBar = () => {
   */
    const {activateBrowserWallet, account, switchNetwork, chainId} = useEthers();
 
-   console.log("usedapp" + chainId + "account" + account)
-   console.log("window.ethereum" + netWorkInfo.chainId + "network info account" + netWorkInfo.account)
-   //@ts-ignore
-   console.log(window.ethereum)
+  //  console.log("usedapp" + chainId + "account" + account)
+  //  console.log("window.ethereum" + netWorkInfo.chainId + "network info account" + netWorkInfo.account)
+  //  //@ts-ignore
+  //  console.log(window.ethereum)
 
   //@ts-ignore
   if (window.ethereum) {
