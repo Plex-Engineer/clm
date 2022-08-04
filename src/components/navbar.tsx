@@ -249,7 +249,9 @@ const NavBar = () => {
 
   useEffect(() => {
     const [chainId, account] = getChainIdandAccount();
-    console.log(chainId, account, "update")
+    console.log(chainId, account, "update");
+    //@ts-ignore
+    console.log(window.ethereum)
     netWorkInfo.setChainId(chainId);
     netWorkInfo.setAccount(account);
     //@ts-ignore
