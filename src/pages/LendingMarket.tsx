@@ -4,9 +4,6 @@ import { useState, useEffect } from "react";
 import LendingTable from "../components/lending/lendingTable";
 import { useSetToken } from "providers/activeTokenContext";
 import {
-  addNetwork,
-} from "constants/addCantoToWallet";
-import {
   SupplyRow,
   SupplyingRow,
   BorrowingRow,
@@ -22,7 +19,7 @@ import { toast } from "react-toastify";
 import CypherText from "components/lending/CypherText";
 import { Details } from "hooks/useTransaction";
 import Popup from "reactjs-popup";
-import { CTOKEN } from "constants/tokens";
+import { CTOKEN } from "cantoui";
 import { useNetworkInfo } from "stores/networkInfo";
 
 const Container = styled.div`

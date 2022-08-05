@@ -1,4 +1,4 @@
-import { CTOKENS } from "./tokens";
+import { CTOKENS } from "cantoui";
 
 export const cTokensBase = [
   CTOKENS.cantoTestnet.CCANTO,

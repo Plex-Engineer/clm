@@ -1,11 +1,11 @@
 import { HelmetProvider } from "react-helmet-async";
-import { DAppProvider, Config, Mainnet as ETHMain } from "@usedapp/core";
+import { DAppProvider, Config } from "@usedapp/core";
 import React from "react";
 import TokenProvider from "./activeTokenContext";
 import OverallStatsProvider from "./overallStats";
 import TransactionStatusProvider from "./transactionContext";
 import { Chain } from "@usedapp/core";
-import {CantoMain, CantoTest} from "constants/networks"
+import {CantoMainnet as CantoMain, CantoTestnet as CantoTest} from "cantoui"
 
 interface IProviderProps {
   children: React.ReactNode;

@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { noteSymbol } from 'utils'
-
 interface Props {
     text : string
 }

@@ -2,7 +2,6 @@ import "App.css";
 import LendingMarket from "pages/LendingMarket";
 import styled from "styled-components";
 import GlobalStyles from "styles/global-styles";
-import NavBar from "components/navbar";
 import {
   BrowserRouter as Router,
   Routes,
@@ -139,7 +138,6 @@ function App() {
           <ScanlinesOverlay />
           <GlobalStyles />
           <OverlayLines/>
-          {/* <NavBar/>  */}
           <CantoNav/>
           <Routes>
             <Route path="/" element={<LendingMarket />} />

@@ -1,12 +1,13 @@
 import { useEthers } from "@usedapp/core";
 import { NavBar } from "cantoui";
-import { addNetwork, getAccountBalance, getChainIdandAccount } from "constants/addCantoToWallet";
+import { addNetwork, getAccountBalance, getChainIdandAccount } from "utils/addCantoToWallet";
 import { useEffect } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
+import logo from "../assets/logo.svg"
 
 export const CantoNav = () => {
   const netWorkInfo = useNetworkInfo();
-  const { activateBrowserWallet, account, switchNetwork } = useEthers();
+  const { activateBrowserWallet, account } = useEthers();
 
   useEffect(() => {
     const [chainId, account] = getChainIdandAccount();
@@ -49,6 +50,7 @@ export const CantoNav = () => {
       isConnected={netWorkInfo.isConnected && account ? true : false}
       balance={netWorkInfo.balance}
       currency={"CANTO"}
+      logo={logo}
     />
   );
 };

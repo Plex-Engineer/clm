@@ -1,19 +1,17 @@
 import { formatEther } from "@ethersproject/units";
-import { useCalls, useCall, useEtherBalance } from "@usedapp/core";
+import { useCalls, useEtherBalance } from "@usedapp/core";
 import { BigNumber, Contract } from "ethers";
-import { CantoMain, CantoTest } from "constants/networks";
-import {abi } from "constants/abi"
+import { abi } from "constants/abi"
 import { ethers } from "ethers";
-import { CTOKEN, CTOKENS } from "constants/tokens";
+import { CTOKENS, CTOKEN, CantoTestnet, ADDRESSES } from "cantoui";
 import { cTokensBase, mainnetBasecTokens } from "constants/lendingMarketTokens";
-import addresses from "constants/addresses";
 
 const formatUnits = ethers.utils.formatUnits;
 
 export function useTokens(account: string | undefined, chainId : number): any[] | undefined {
 
-  const tokens : CTOKEN[] = chainId == CantoTest.chainId ? cTokensBase : mainnetBasecTokens;
-  const address = chainId == CantoTest.chainId ? addresses.testnet : addresses.cantoMainnet
+  const tokens : CTOKEN[] = chainId == CantoTestnet.chainId ? cTokensBase : mainnetBasecTokens;
+  const address = chainId == CantoTestnet.chainId ? ADDRESSES.testnet : ADDRESSES.cantoMainnet
 
   
   const secondsPerBlock = 5.8;

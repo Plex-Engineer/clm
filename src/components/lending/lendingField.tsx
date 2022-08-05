@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { TrasanctionType } from "components/lending/BorrowLimits";
 import { formatBalance } from "utils";
 

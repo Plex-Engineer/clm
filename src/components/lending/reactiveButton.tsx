@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { TrasanctionType } from "components/lending/BorrowLimits";
 import { TransactionStatus } from "@usedapp/core";
 import styled from "styled-components";
