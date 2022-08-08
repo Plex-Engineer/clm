@@ -26,7 +26,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   color: #fff;
-  margin: 2rem 1.5rem; //TODO: make this dynamic
+  margin: 2rem 2%; //TODO: make this dynamic
   .typing {
     color: var(--primary-color);
     margin: 2rem 4rem;
@@ -59,6 +59,7 @@ const Container = styled.div`
     margin: 0;
     justify-content: right;
     flex-wrap: wrap;
+    /* padding-right: 0.5%; */
     button {
       margin: 0;
       width: 15rem;
@@ -699,6 +700,7 @@ const LendingMarket = () => {
                 }}
               ></div>
             </div>
+            <p style={{width: "100%", textAlign: 'right'}}>{noteSymbol + stats?.totalBorrowLimit.toFixed(2)}</p>
           </TinyTable>
         }
         position="top center"
@@ -722,6 +724,7 @@ const LendingMarket = () => {
           )}
         </ToolTip>
       </Popup>
+
 
       <SpecialTabs></SpecialTabs>
 
