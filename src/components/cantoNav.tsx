@@ -1,20 +1,27 @@
 import { useEthers } from "@usedapp/core";
 import { NavBar } from "cantoui";
-import { addNetwork, getAccountBalance, getChainIdandAccount } from "utils/addCantoToWallet";
+import {
+  addNetwork,
+  getAccountBalance,
+  getChainIdandAccount,
+} from "utils/addCantoToWallet";
 import { useEffect } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
-import logo from "../assets/logo.svg"
+import logo from "../assets/logo.svg";
 
 export const CantoNav = () => {
   const netWorkInfo = useNetworkInfo();
   const { activateBrowserWallet, account } = useEthers();
 
-  useEffect(() => {
-    const [chainId, account] = getChainIdandAccount();
+  async function setChainInfo() {
+    const [chainId, account] = await getChainIdandAccount();
     netWorkInfo.setChainId(chainId);
     netWorkInfo.setAccount(account);
-    //@ts-ignore
-  }, [window.ethereum?.selectedAddress, window.ethereum?.networkVersion]);
+  }
+
+  useEffect(() => {
+    setChainInfo();
+  }, []);
 
   //@ts-ignore
   if (window.ethereum) {
@@ -31,12 +38,12 @@ export const CantoNav = () => {
 
   async function getBalance() {
     if (netWorkInfo.account != undefined) {
-      netWorkInfo.setBalance(await getAccountBalance(netWorkInfo.account))
+      netWorkInfo.setBalance(await getAccountBalance(netWorkInfo.account));
     }
   }
   useEffect(() => {
     getBalance();
-  },[netWorkInfo.account])
+  }, [netWorkInfo.account]);
 
   return (
     <NavBar
