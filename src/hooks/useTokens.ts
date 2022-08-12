@@ -168,7 +168,7 @@ export function useTokens(account: string | undefined, chainId : number): any[] 
       const collateralFactor : string = formatEther(tokenData[8][1]);
       const isListed : boolean = tokenData[8][0];
       const borrowBalance : string = formatUnits(tokenData[2][0], tokens[idx].underlying.decimals);
-      const supplyBalance1 : string = formatUnits(BigNumber.from(tokenData[4][0]).mul(tokenData[0][0]),(36 + tokens[idx].underlying.decimals - tokens[idx].decimals)); 
+      const supplyBalance1 : string = formatUnits(BigNumber.from(tokenData[4][0]).mul(tokenData[0][0]),(18 + tokens[idx].underlying.decimals)); 
       const supplyBalance : string = supplyBalance1.slice(0, supplyBalance1.indexOf('.') + tokens[idx].decimals + 1);
       const inSupplyMarket : boolean = Number(balanceOfC) > 0;
       const inBorrowMarket : boolean = Number(borrowBalance) > 0;
