@@ -8,7 +8,6 @@ import { formatBalance } from "utils";
 import { TransactionStatus } from "@usedapp/core";
 import { InputState, ReactiveButton } from "./reactiveButton";
 import LoadingModal from "components/modals/loadingModal";
-import {toast, ToastOptions} from 'react-toastify';
 import { LoadingOverlay } from "./supplyModal";
 
 //STYLING
@@ -216,7 +215,7 @@ const BorrowModal = ( { onClose } : IProps) => {
               } else {
                 setInputState(InputState.ENTERAMOUNT);
               }
-              setAmount(val.toString());
+              setAmount(val.toFixed(token.data.underlying.decimals));
               setMax(true);
             }
           }}

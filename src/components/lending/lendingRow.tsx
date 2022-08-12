@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 import LendingSwitch from "../lendingSwitch";
 import { noteSymbol } from "utils";
 import Popup from "reactjs-popup";

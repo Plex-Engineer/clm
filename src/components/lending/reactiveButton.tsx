@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { TrasanctionType } from "components/lending/BorrowLimits";
 import { TransactionStatus } from "@usedapp/core";
 import styled from "styled-components";
@@ -66,8 +65,9 @@ interface IButton {
   isEth: boolean;
   onTransaction: (transaction: TransactionStatus) => void;
 }
-function truncateNumber(value:number, decimals:number) {
-  return (Math.trunc(value * Math.pow(10,decimals))/Math.pow(10,decimals))
+
+function truncateByDecimals(amount:string, decimals: number) {
+  return amount.slice(0, amount.indexOf('.') + decimals + 1);
 }
 
 const ReactiveButton = ({
@@ -80,12 +80,11 @@ const ReactiveButton = ({
   isEth,
 }: IButton) => {
   // const addTransaction = useTransactionStatusUpdate();
-  const formatedAmount = truncateNumber(Number(amount), token.data.underlying.decimals).toString();
   const details: Details = {
     name: token.data.underlying.symbol,
     address: token.data.address,
     icon: token.data.underlying.icon,
-    amount: formatedAmount,
+    amount: amount,
     type: showText(),
   };
   const { state: supplyState, send: supplySend } = useSupply(details);
@@ -101,7 +100,7 @@ const ReactiveButton = ({
     {  name: token.data.underlying.symbol,
       address: token.data.underlying.address,
       icon: token.data.underlying.icon,
-      amount: formatedAmount,
+      amount: amount,
       type: showText(),}
   );
 
@@ -163,11 +162,11 @@ const ReactiveButton = ({
       if (
         (transactionType == TrasanctionType.BORROW ||
           transactionType == TrasanctionType.WITHDRAW) &&
-        token.cash < formatedAmount
+        token.cash < Number(amount)
       ) {
         return <DisabledButton>no {token.data.underlying.symbol} left</DisabledButton>;
       }
-      if (transactionType == TrasanctionType.BORROW && token.borrowCap < formatedAmount) {
+      if (transactionType == TrasanctionType.BORROW && token.borrowCap < Number(amount)) {
         return <DisabledButton>borrow cap has been reached</DisabledButton>
       }
       return (
@@ -179,25 +178,25 @@ const ReactiveButton = ({
                   const gas = max ? "1000000000000000" : "0"
                   supplySendEth({
                     to: token.data.address,
-                    value: ethers.utils.parseUnits(formatedAmount, token.data.underlying.decimals).sub(gas),
+                    value: ethers.utils.parseUnits(truncateByDecimals(amount, token.data.underlying.decimals), token.data.underlying.decimals).sub(gas),
                   });
                 } else {
-                  supplySend(ethers.utils.parseUnits(formatedAmount, token.data.underlying.decimals));
+                  supplySend(ethers.utils.parseUnits(truncateByDecimals(amount, token.data.underlying.decimals), token.data.underlying.decimals));
                 }
                 Mixpanel.events.lendingMarketActions.supply(
                   token.wallet,
                   token.data.symbol,
-                  ethers.utils.parseUnits(formatedAmount, token.data.underlying.decimals).toString(),
+                  ethers.utils.parseUnits(truncateByDecimals(amount, token.data.underlying.decimals), token.data.underlying.decimals).toString(),
                   token.price
                 );
 
                 break;
               case TrasanctionType.BORROW:
-                borrowSend(ethers.utils.parseUnits(formatedAmount, token.data.underlying.decimals));
+                borrowSend(ethers.utils.parseUnits(truncateByDecimals(amount, token.data.underlying.decimals), token.data.underlying.decimals));
                 Mixpanel.events.lendingMarketActions.borrow(
                   token.wallet,
                   token.data.symbol,
-                  ethers.utils.parseUnits(formatedAmount, token.data.underlying.decimals).toString(),
+                  ethers.utils.parseUnits(truncateByDecimals(amount, token.data.underlying.decimals), token.data.underlying.decimals).toString(),
                   token.price
                 );
                 break;
@@ -206,28 +205,28 @@ const ReactiveButton = ({
                   repaySendEth({
                     to: token.data.address,
                     data: "0x4e4d9fea",
-                    value: ethers.utils.parseUnits(formatedAmount, token.data.underlying.decimals)
+                    value: ethers.utils.parseUnits(truncateByDecimals(amount, token.data.underlying.decimals), token.data.underlying.decimals)
                   });
                 } else {
                   repaySend(
-                    max && token.balanceOf > token.borrowBalance + 0.001
+                    max && (Number(token.balanceOf) > (Number(token.borrowBalance) + 0.001))
                       ? "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-                      : ethers.utils.parseUnits(formatedAmount, token.data.underlying.decimals)
+                      : ethers.utils.parseUnits(truncateByDecimals(amount, token.data.underlying.decimals), token.data.underlying.decimals)
                   );
                 }
                 Mixpanel.events.lendingMarketActions.repay(
                   token.wallet,
                   token.data.symbol,
-                  ethers.utils.parseUnits(formatedAmount, token.data.underlying.decimals).toString(),
+                  ethers.utils.parseUnits(truncateByDecimals(amount, token.data.underlying.decimals), token.data.underlying.decimals).toString(),
                   token.price
                 );
                 break;
               case TrasanctionType.WITHDRAW:
-                redeemSend(ethers.utils.parseUnits(formatedAmount, token.data.underlying.decimals));
+                redeemSend(ethers.utils.parseUnits(truncateByDecimals(amount, token.data.underlying.decimals), token.data.underlying.decimals));
                 Mixpanel.events.lendingMarketActions.withdraw(
                   token.wallet,
                   token.data.symbol,
-                  ethers.utils.parseUnits(formatedAmount, token.data.underlying.decimals).toString(),
+                  ethers.utils.parseUnits(truncateByDecimals(amount, token.data.underlying.decimals), token.data.underlying.decimals).toString(),
                   token.price
                 );
             }

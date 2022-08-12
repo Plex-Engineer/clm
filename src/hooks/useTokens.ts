@@ -1,17 +1,17 @@
 import { formatEther } from "@ethersproject/units";
-import { useCalls, useCall, useEtherBalance } from "@usedapp/core";
+import { useCalls, useEtherBalance } from "@usedapp/core";
 import { BigNumber, Contract } from "ethers";
-import { CantoMain, CantoTest } from "constants/networks";
-import {abi } from "constants/abi"
+import { abi } from "constants/abi"
 import { ethers } from "ethers";
-import { CTOKEN, CTOKENS } from "constants/tokens";
+import { CTOKENS, CTOKEN, CantoTestnet, ADDRESSES } from "cantoui";
 import { cTokensBase, mainnetBasecTokens } from "constants/lendingMarketTokens";
-import addresses from "constants/addresses";
+
+const formatUnits = ethers.utils.formatUnits;
 
 export function useTokens(account: string | undefined, chainId : number): any[] | undefined {
 
-  const tokens : CTOKEN[] = chainId == CantoTest.chainId ? cTokensBase : mainnetBasecTokens;
-  const address = chainId == CantoTest.chainId ? addresses.testnet : addresses.cantoMainnet
+  const tokens : CTOKEN[] = chainId == CantoTestnet.chainId ? cTokensBase : mainnetBasecTokens;
+  const address = chainId == CantoTestnet.chainId ? ADDRESSES.testnet : ADDRESSES.cantoMainnet
 
   
   const secondsPerBlock = 5.8;
@@ -155,32 +155,30 @@ export function useTokens(account: string | undefined, chainId : number): any[] 
   if (!tokens) {
     return undefined;
   }
-  console.log(results)
-
   if (chuckSize > 0 && results?.[0] != undefined && !results?.[0].error) {
     processedTokens = array_chunks(results, chuckSize);
     const val =  processedTokens.map((tokenData,idx) => {
-      const cash = Number(ethers.utils.formatUnits(tokenData[3][0], tokens[idx].underlying.decimals));
-      const price = (tokens[idx].symbol == "cNOTE" || tokens[idx].symbol == "cUSDC" || tokens[idx].symbol == "cUSDT") ? 1 : Number(formatEther(tokenData[10][0]))/(10 ** (18-tokens[idx].underlying.decimals));
-      const liquidity = cash * price;
-      const balanceOfC : number = Number(ethers.utils.formatUnits(tokenData[0][0], tokens[idx].decimals));
-      const balanceOf = tokens[idx].symbol === "cCANTO" ? bal : Number(ethers.utils.formatUnits(tokenData[1][0],tokens[idx].underlying.decimals));
-      const exchangeRate = tokenData[4][0]/Math.pow(10,18 + tokens[idx].underlying.decimals - tokens[idx].decimals);
-      const allowance = tokens[idx].symbol === "cCANTO" ? true : Number(ethers.utils.formatUnits(tokenData[7][0], tokens[idx].underlying.decimals)) > 0;
-      const collateralFactor = Number(formatEther(tokenData[8][1]));
-      const isListed = tokenData[8][0];
-      const borrowBalance = Number(ethers.utils.formatUnits(tokenData[2][0], tokens[idx].underlying.decimals));
-      const supplyBalance =Number(formatEther(BigNumber.from(tokenData[4][0]).mul(tokenData[0][0]).div(BigNumber.from(10).pow(18 + tokens[idx].underlying.decimals - tokens[idx].decimals))) )
-      const inSupplyMarket = balanceOfC > 0;
-      const inBorrowMarket = borrowBalance > 0;
-      const supplyBalanceinNote = supplyBalance * price;
-      const borrowBalanceinNote = borrowBalance * price;
+      const cash : string = formatUnits(tokenData[3][0], tokens[idx].underlying.decimals);
+      const price : string = (tokens[idx].symbol == "cNOTE" || tokens[idx].symbol == "cUSDC" || tokens[idx].symbol == "cUSDT") ? "1" : (formatUnits(tokenData[10][0], 36 - tokens[idx].underlying.decimals));
+      const liquidity : string = formatUnits(ethers.BigNumber.from(tokenData[3][0]).mul(tokenData[10][0]), 36);
+      const balanceOfC : string = formatUnits(tokenData[0][0], tokens[idx].decimals);
+      const balanceOf : string = tokens[idx].symbol === "cCANTO" ? bal : ethers.utils.formatUnits(tokenData[1][0],tokens[idx].underlying.decimals);
+      const exchangeRate : string = formatUnits(tokenData[4][0], 18 + tokens[idx].underlying.decimals - tokens[idx].decimals);
+      const allowance : boolean = tokens[idx].symbol === "cCANTO" ? true : Number(ethers.utils.formatUnits(tokenData[7][0], tokens[idx].underlying.decimals)) > 0;
+      const collateralFactor : string = formatEther(tokenData[8][1]);
+      const isListed : boolean = tokenData[8][0];
+      const borrowBalance : string = formatUnits(tokenData[2][0], tokens[idx].underlying.decimals);
+      const supplyBalance1 : string = formatUnits(BigNumber.from(tokenData[4][0]).mul(tokenData[0][0]),(18 + tokens[idx].underlying.decimals)); 
+      const supplyBalance : string = supplyBalance1.slice(0, supplyBalance1.indexOf('.') + tokens[idx].decimals + 1);
+      const inSupplyMarket : boolean = Number(balanceOfC) > 0;
+      const inBorrowMarket : boolean = Number(borrowBalance) > 0;
+      const supplyBalanceinNote : string = (Number(supplyBalance) * Number(price)).toFixed(18);
+      const borrowBalanceinNote : string = (Number(borrowBalance) * Number(price)).toFixed(18);
       const supplyAPY = getSupplyAPY(Number(formatEther(tokenData[5][0])));
       const borrowAPY = getBorrowAPY(Number(formatEther(tokenData[6][0])));
       const compSpeed = Number(formatEther(tokenData[11][0]));
-      const distAPY = getDistributionAPY(compSpeed, cash, price, Number(formatEther(results[results.length-1]?.value[0])));
-      // const borrowCap = formatBalanceFromDecimals([13][0], tokens[idx].decimals) == 0 ? Number.MAX_SAFE_INTEGER : formatBalanceFromDecimals([13][0], tokens[idx].decimals);
-      const borrowCap = Number.MAX_SAFE_INTEGER;
+      const distAPY = getDistributionAPY(compSpeed, cash, Number(price), Number(formatEther(results[results.length-1]?.value[0])));
+      const borrowCap = ethers.BigNumber.from(tokenData[12][0]).eq(ethers.BigNumber.from("0")) ? Number.MAX_SAFE_INTEGER : formatUnits(tokenData[12][0], tokens[idx].underlying.decimals);
       return {
         data: tokens?.[idx],
         wallet: account,
@@ -213,16 +211,16 @@ export function useTokens(account: string | undefined, chainId : number): any[] 
     let totalBorrowLimitUsed = 0;
     val?.forEach((token) => {
         if (token?.inSupplyMarket) {
-          totalSupply += token.supplyBalanceinNote;
+          totalSupply += Number(token.supplyBalanceinNote);
         }
         if (token?.inBorrowMarket) {
-          totalBorrow += token.borrowBalanceinNote;
+          totalBorrow += Number(token.borrowBalanceinNote);
         }
       
         if(token?.collateral){
-          totalBorrowLimit += token.collateralFactor * token.supplyBalanceinNote;
+          totalBorrowLimit += Number(token.collateralFactor) * Number(token.supplyBalanceinNote);
           if(token?.inBorrowMarket){
-            totalBorrowLimitUsed += token.borrowBalanceinNote;
+            totalBorrowLimitUsed += Number(token.borrowBalanceinNote);
           }
         }
 

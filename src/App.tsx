@@ -2,7 +2,6 @@ import "App.css";
 import LendingMarket from "pages/LendingMarket";
 import styled from "styled-components";
 import GlobalStyles from "styles/global-styles";
-import NavBar from "components/navbar";
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,6 +13,8 @@ import bgNoise from "assets/bg-noise.gif";
 import "react-toastify/dist/ReactToastify.css";
 import {ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
+import { CantoNav } from "components/cantoNav";
+
 
 
 //Styling
@@ -137,7 +138,7 @@ function App() {
           <ScanlinesOverlay />
           <GlobalStyles />
           <OverlayLines/>
-          <NavBar/> 
+          <CantoNav/>
           <Routes>
             <Route path="/" element={<LendingMarket />} />
           </Routes>

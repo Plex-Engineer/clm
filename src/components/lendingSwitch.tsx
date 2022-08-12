@@ -1,8 +1,6 @@
-import React from "react";
 import styled from "styled-components";
 import { ModalManager, ModalType } from "./modalManager";
 import { useState } from "react";
-import { useToken } from "providers/activeTokenContext";
 
 const Wrapper = styled.label`
   /* The switch - the box around the slider */

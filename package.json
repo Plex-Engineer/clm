@@ -15,8 +15,10 @@
     "typechain:generate": "npm run typechain --target=ethers-v5 ./src/abi/*.json --out-dir=./gen/types"
   },
   "dependencies": {
+    "@cosmjs/stargate": "^0.28.11",
     "@usedapp/core": "^1.0.12",
     "@walletconnect/web3-provider": "^1.7.8",
+    "cantoui": "^1.0.14",
     "ethers": "^5.6.5",
     "ethers-multicall": "^0.2.3",
     "mixpanel": "^0.16.0",

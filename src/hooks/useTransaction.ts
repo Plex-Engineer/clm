@@ -1,9 +1,7 @@
 import { useContractFunction, useSendTransaction, useEthers } from "@usedapp/core";
 import {  Contract, utils } from "ethers";
-import {abi } from "constants/abi"
-import ADDRESSES from "constants/addresses";
-import { TOKENS } from "constants/tokens";
-import { CantoTest } from "constants/networks";
+import { abi } from "constants/abi"
+import { TOKENS, CantoTestnet, ADDRESSES } from "cantoui";
 
 
 
@@ -23,7 +21,7 @@ import { CantoTest } from "constants/networks";
 
   export function useEnterMarkets(props : Details) {
     const { chainId } = useEthers();
-    const comptroller = chainId == CantoTest.chainId ? ADDRESSES.testnet.Comptroller : ADDRESSES.cantoMainnet.Comptroller;
+    const comptroller = chainId == CantoTestnet.chainId ? ADDRESSES.testnet.Comptroller : ADDRESSES.cantoMainnet.Comptroller;
 
     const compInterface = new utils.Interface(abi.comptoller);
     const contract = new Contract(comptroller, compInterface)
@@ -41,7 +39,7 @@ import { CantoTest } from "constants/networks";
 
   export function useExitMarket(props : Details) {
     const { chainId } = useEthers();
-    const comptroller = chainId == CantoTest.chainId ? ADDRESSES.testnet.Comptroller : ADDRESSES.cantoMainnet.Comptroller;
+    const comptroller = chainId == CantoTestnet.chainId ? ADDRESSES.testnet.Comptroller : ADDRESSES.cantoMainnet.Comptroller;
     
     const compInterface = new utils.Interface(abi.comptoller);
     const contract = new Contract(comptroller, compInterface)

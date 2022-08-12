@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { TrasanctionType } from "components/lending/BorrowLimits";
 import { formatBalance } from "utils";
 
@@ -57,14 +57,14 @@ const Max = styled.span`
 `
 
 type Props = {
-  balance: number;
+  balance: string;
   type?: string;
   hasToken?: boolean;
   token?: any;
   limit ?:number
   transactionType : TrasanctionType
   onChange?: (value: string) => void;
-  onMax: (value : number) => void;
+  onMax: (value : string) => void;
   value : string
 };
 
@@ -95,10 +95,10 @@ const LendingField = (props: Props) => {
 
     setValue(e.target.value);
 
-    if(Number(e.target.value) > props.balance || isNaN(Number(e.target.value))) {
-      setRemaining(0);
+    if(Number(e.target.value) > Number(props.balance) || isNaN(Number(e.target.value))) {
+      setRemaining("0");
     } else {
-      setRemaining(props.balance - Number(e.target.value));
+      setRemaining((Number(props.balance) - Number(e.target.value)).toString());
     }
     if(props.onChange != undefined){
       props.onChange(e.target.value);
@@ -134,7 +134,7 @@ const LendingField = (props: Props) => {
             }
             props.onMax(props.balance);
          
-          setRemaining(0);
+          setRemaining("0");
         }}>{(props.transactionType != TrasanctionType.BORROW ) && props.limit === undefined || (props.transactionType == TrasanctionType.REPAY) ? "max" : "80% limit"}</Max></p>
       </div>
     

@@ -1,14 +1,8 @@
-import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import { useNotifications } from "@usedapp/core";
 import { useState, useEffect } from "react";
 import LendingTable from "../components/lending/lendingTable";
 import { useSetToken } from "providers/activeTokenContext";
-import {
-  addCTokens,
-  addTokens,
-  addNetwork,
-} from "constants/addCantoToWallet";
 import {
   SupplyRow,
   SupplyingRow,
@@ -25,14 +19,14 @@ import { toast } from "react-toastify";
 import CypherText from "components/lending/CypherText";
 import { Details } from "hooks/useTransaction";
 import Popup from "reactjs-popup";
-import { CTOKEN } from "constants/tokens";
+import { CTOKEN } from "cantoui";
 import { useNetworkInfo } from "stores/networkInfo";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   color: #fff;
-  margin: 2rem 1.5rem; //TODO: make this dynamic
+  margin: 2rem 2%; //TODO: make this dynamic
   .typing {
     color: var(--primary-color);
     margin: 2rem 4rem;
@@ -65,6 +59,7 @@ const Container = styled.div`
     margin: 0;
     justify-content: right;
     flex-wrap: wrap;
+    /* padding-right: 0.5%; */
     button {
       margin: 0;
       width: 15rem;
@@ -245,7 +240,6 @@ const LendingMarket = () => {
   const [notifs, setNotifs] = useState<any[]>([]);
 
   useEffect(() => {
-    addNetwork();
       if (!networkInfo.isConnected) {
         toast.error("please switch networks", {
           toastId: 1,
@@ -388,7 +382,7 @@ const LendingMarket = () => {
               .map((token: any) =>
                 token.inSupplyMarket ? (
                   <SupplyingRow
-                    collaterable={token.collateralFactor > 0}
+                    collaterable={Number(token.collateralFactor) > 0}
                     key={token.data.address + "supplying"}
                     onClick={() => {
                       setToken({ token, stats });
@@ -400,7 +394,7 @@ const LendingMarket = () => {
                     apy={token.supplyAPY.toFixed(2)}
                     distAPY={token.distAPY.toFixed(2)}
                     wallet={Number(formatBalance(token.supplyBalance))}
-                    balance={formatBalance(token.supplyBalanceinNote)}
+                    balance={formatBalance(Number(token.supplyBalanceinNote))}
                     symbol={token.data.underlying.symbol}
                     collateral={token.collateral}
                     onToggle={(state) => {
@@ -562,7 +556,7 @@ const LendingMarket = () => {
                     apy={token.borrowAPY.toFixed(2)}
                     wallet={Number(formatBalance(token.balanceOf))}
                     symbol={token.data.underlying.symbol}
-                    liquidity={Number(token.liquidity.toFixed(4))}
+                    liquidity={Number(token.liquidity)}
                     onToggle={() => {
                       setToken({ token, stats });
                     }}
@@ -706,6 +700,7 @@ const LendingMarket = () => {
                 }}
               ></div>
             </div>
+            <p style={{width: "100%", textAlign: 'right'}}>{noteSymbol + stats?.totalBorrowLimit.toFixed(2)}</p>
           </TinyTable>
         }
         position="top center"
@@ -729,6 +724,7 @@ const LendingMarket = () => {
           )}
         </ToolTip>
       </Popup>
+
 
       <SpecialTabs></SpecialTabs>
 

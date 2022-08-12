@@ -110,7 +110,6 @@ const SupplyModal = ( { onClose } : IProps) => {
 
   
   const [amount, setAmount] = useState("");
-  const [finalAmount, setFinalAmount] = useState("");
 
   useEffect(() => {
     if(['Success' , 'Fail' , 'Exception'].includes(
@@ -228,14 +227,14 @@ const SupplyModal = ( { onClose } : IProps) => {
         />
         {/* supply */}
         <LendingField
-          onMax={(value) => {
+          onMax={(value : string) => {
             if (inputState != InputState.ENABLE) {
-              const val = Number(value);
-              if (val > 0) setInputState(InputState.CONFIRM);
+              const val = value;
+              if (Number(val) > 0) setInputState(InputState.CONFIRM);
               else {
                 setInputState(InputState.ENTERAMOUNT);
               }
-              setAmount(val.toString());
+              setAmount(val);
               setMax(true)
             }
           }}
@@ -309,9 +308,9 @@ const SupplyModal = ( { onClose } : IProps) => {
               //check if we are in the withdraw state
               let val = !token.collateral? value :
                 withdrawAmount() < token.supplyBalance
-                  ? withdrawAmount()
+                  ? withdrawAmount().toFixed(token.data.underlying.decimals)
                   : value;
-              val = Number(val) < 0 ? 0 : val;
+              val = Number(val) < 0 ? "0" : val;
               setAmount(val.toString());
               //Check that max was actually 100% of the balance
               token.supplyBalance > val ? setMax(false) : setMax(true);
