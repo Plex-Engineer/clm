@@ -123,7 +123,7 @@ const LendingField = (props: Props) => {
         display: "flex",
         justifyContent: "space-between",
       }}>
-        <p>{formatBalance(remaining)}
+        <p>{formatBalance(props.balance)}
         </p>
         <p>
           <Max onClick={()=>{
