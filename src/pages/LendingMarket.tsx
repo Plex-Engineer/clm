@@ -239,13 +239,6 @@ const LendingMarket = () => {
   const { notifications } = useNotifications();
   const [notifs, setNotifs] = useState<any[]>([]);
 
-  useEffect(() => {
-      if (!networkInfo.isConnected) {
-        toast.error("please switch networks", {
-          toastId: 1,
-        });
-      }
-  }, [networkInfo.chainId]);
 
   useEffect(() => {
     notifications.forEach((item) => {
@@ -609,11 +602,7 @@ const LendingMarket = () => {
     // console.log(stats?.totalBorrow.toFixed(6))
   }, [tokens]);
 
-  return !networkInfo.isConnected ? (
-    <div style={{ color: "red", textAlign: "center" }}>
-      <h1>please switch to canto mainnet</h1>
-    </div>
-  ) : (
+  return (
     <Container className="lendingMarket">
       <ModalManager
         isOpen={isOpen}
@@ -841,8 +830,7 @@ const LendingMarket = () => {
         </div>
       </div>
     </Container>
-  );
-};
+)};
 
 const SpecialTabs = () => {
   const TabBar = styled.div`
