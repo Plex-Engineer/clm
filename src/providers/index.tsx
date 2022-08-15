@@ -5,7 +5,7 @@ import TokenProvider from "./activeTokenContext";
 import OverallStatsProvider from "./overallStats";
 import TransactionStatusProvider from "./transactionContext";
 import { Chain } from "@usedapp/core";
-import {CantoMainnet as CantoMain, CantoTestnet as CantoTest} from "cantoui"
+import {CantoMainnet as CantoMain, CantoTestnet as CantoTest, NodeAddresses} from "cantoui"
 
 interface IProviderProps {
   children: React.ReactNode;
@@ -31,7 +31,7 @@ export const CantoTestnet: Chain = {
 export const CantoMainnet: Chain = {
   chainId: CantoMain.chainId,
   chainName: CantoMain.name,
-  rpcUrl : CantoMain.rpcUrl,
+  rpcUrl : NodeAddresses.CantoMainnet.ChandraRPC,
   isTestChain: CantoMain.isTestChain,
   isLocalChain: false,
   multicallAddress: '0x210b88d5Ad4BEbc8FAC4383cC7F84Cd4F03d18c6',
@@ -47,7 +47,7 @@ const config: Config = {
   networks : [CantoTestnet, CantoMainnet],
   readOnlyUrls: {
     [CantoTestnet.chainId]: CantoTest.rpcUrl,
-    [CantoMainnet.chainId] : CantoMain.rpcUrl
+    [CantoMainnet.chainId] : NodeAddresses.CantoMainnet.ChandraRPC
   },
   noMetamaskDeactivate : true,
 };
