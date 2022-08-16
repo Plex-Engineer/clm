@@ -8,14 +8,11 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import { HelmetProvider } from "react-helmet-async";
 import bgNoise from "assets/bg-noise.gif";
 import "react-toastify/dist/ReactToastify.css";
-import {ToastContainer } from "react-toastify";
-import { useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
+import React, { useEffect, useState } from "react";
 import { CantoNav } from "components/cantoNav";
-
-
 
 //Styling
 
@@ -112,7 +109,7 @@ const Overlay = styled.div<OverlayProps>`
       transparent 100%
     );
     background-repeat: no-repeat;
-    background-position : 0 1000vh;
+    background-position: 0 1000vh;
     animation: scan 10s linear 0s 1;
   }
   @keyframes scan {
@@ -121,58 +118,29 @@ const Overlay = styled.div<OverlayProps>`
     }
     35%,
     100% {
-      background-position: 0 ${(props) => props.height +300}px;
+      background-position: 0 ${(props) => props.height + 300}px;
     }
   }
 `;
 //View
 
 function App() {
-
   return (
-    <HelmetProvider>
+    <React.Fragment>
       <ToastContainer />
       <Router>
         <Container className="App">
           <StaticOverlay url={bgNoise} />
           <ScanlinesOverlay />
           <GlobalStyles />
-          <OverlayLines/>
-          <CantoNav/>
+          <CantoNav />
           <Routes>
             <Route path="/" element={<LendingMarket />} />
           </Routes>
         </Container>
       </Router>
-    </HelmetProvider>
+    </React.Fragment>
   );
 }
-
-const OverlayLines = () => {
-  const location = useLocation();
-  let scrollHeight = Math.max(
-    document.body.scrollHeight, document.documentElement.scrollHeight,
-    document.body.offsetHeight, document.documentElement.offsetHeight,
-    document.body.clientHeight, document.documentElement.clientHeight
-  );
-  const [documentHeight, setDocumentHeight] = useState(
-    scrollHeight
-  );
-
-  useEffect(() => {
-   setTimeout(()=>{
-    let scrollHeight = Math.max(
-      document.body.scrollHeight, document.documentElement.scrollHeight,
-      document.body.offsetHeight, document.documentElement.offsetHeight,
-      document.body.clientHeight, document.documentElement.clientHeight
-    );
-    setDocumentHeight(scrollHeight);
-
-   }, 2000)
-  }, [location]);
-
-
-  return <Overlay height={documentHeight} />;
-};
 
 export default App;
