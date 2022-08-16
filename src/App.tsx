@@ -2,16 +2,11 @@ import "App.css";
 import LendingMarket from "pages/LendingMarket";
 import styled from "styled-components";
 import GlobalStyles from "styles/global-styles";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+
 import bgNoise from "assets/bg-noise.gif";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CantoNav } from "components/cantoNav";
 
 //Styling
@@ -128,17 +123,11 @@ function App() {
   return (
     <React.Fragment>
       <ToastContainer />
-      <Router>
-        <Container className="App">
-          <StaticOverlay url={bgNoise} />
-          <ScanlinesOverlay />
-          <GlobalStyles />
-          <CantoNav />
-          <Routes>
-            <Route path="/" element={<LendingMarket />} />
-          </Routes>
-        </Container>
-      </Router>
+      <Container className="App">
+        <GlobalStyles />
+        <CantoNav />
+        <LendingMarket />
+      </Container>
     </React.Fragment>
   );
 }
