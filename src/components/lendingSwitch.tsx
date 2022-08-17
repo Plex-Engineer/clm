@@ -125,11 +125,13 @@ const DisabledWrapper = styled(Wrapper)`
 const LendingSwitch = (props: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   if (props.disabled) {
-    return <DisabledWrapper className="switch">
-      <input type="checkbox" checked={props.checked}/>
+    return (
+      <DisabledWrapper className="switch">
+        <input type="checkbox" checked={props.checked} />
 
-      <span className="slider"></span>
-    </DisabledWrapper>;
+        <span className="slider"></span>
+      </DisabledWrapper>
+    );
   }
   return (
     <Wrapper

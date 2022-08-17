@@ -1,7 +1,7 @@
 import { addNetwork } from "utils/addCantoToWallet";
 import create from "zustand";
 import { devtools } from "zustand/middleware";
-import {CantoMainnet, CantoTestnet} from "cantoui"
+import { CantoMainnet, CantoTestnet } from "cantoui";
 
 interface NetworkProps {
   isConnected: boolean;

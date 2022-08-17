@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useEthers } from "@usedapp/core";
 import { NavBar, useAlert } from "cantoui";
 import {
@@ -19,17 +20,28 @@ export const CantoNav = () => {
     netWorkInfo.setChainId(chainId);
     netWorkInfo.setAccount(account);
     if (account != undefined) {
-      netWorkInfo.setBalance(await getAccountBalance(account))
+      netWorkInfo.setBalance(await getAccountBalance(account));
     }
   }
 
   useEffect(() => {
     if (!netWorkInfo.isConnected) {
-      alert.show("Failure", <p>this network is not supported on governance, please <a onClick={addNetwork} style={{cursor: "pointer", textDecoration: "underline"}}>switch networks</a></p>)
+      alert.show(
+        "Failure",
+        <p>
+          this network is not supported on governance, please{" "}
+          <a
+            onClick={addNetwork}
+            style={{ cursor: "pointer", textDecoration: "underline" }}
+          >
+            switch networks
+          </a>
+        </p>
+      );
     } else {
       alert.close();
     }
-  }, [netWorkInfo.isConnected])
+  }, [netWorkInfo.isConnected]);
 
   useEffect(() => {
     setChainInfo();
@@ -47,7 +59,6 @@ export const CantoNav = () => {
       window.location.reload();
     });
   }
-
 
   return (
     <NavBar

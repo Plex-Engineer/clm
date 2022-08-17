@@ -150,7 +150,7 @@ const BalanceModal = ({ value, onClose }: Props) => {
         <Button
           onClick={() => {
             if (state.status != "Mining" && state.status != "Success")
-            // console.log(value.wallet)
+              // console.log(value.wallet)
               send(value.wallet);
           }}
         >

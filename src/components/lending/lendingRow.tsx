@@ -109,12 +109,12 @@ function formatLiquidity(liquidity: number) {
   return fm.substring(0, fm.length - 4);
 }
 const ToolTip = styled.div`
-    border: 1px solid var(--primary-color);
-    background-color: #111;
-    padding: 1rem;
-    /* width: 20rem; */
-    color : white;
-  `
+  border: 1px solid var(--primary-color);
+  background-color: #111;
+  padding: 1rem;
+  /* width: 20rem; */
+  color: white;
+`;
 
 const BorrowingRow = (props: BorrowProps) => {
   return (
@@ -126,12 +126,16 @@ const BorrowingRow = (props: BorrowProps) => {
       <td>
         {props.wallet} {props.symbol}
       </td>
-      {props.assetName == "NOTE" ? <Popup trigger={<td>N/A</td>} on={['hover', 'focus']}><ToolTip>Note Liquidity Is Infinite</ToolTip></Popup> : 
-      <td>
-        {noteSymbol}
-        {formatLiquidity(props.liquidity)}
-      </td>
-      }
+      {props.assetName == "NOTE" ? (
+        <Popup trigger={<td>N/A</td>} on={["hover", "focus"]}>
+          <ToolTip>Note Liquidity Is Infinite</ToolTip>
+        </Popup>
+      ) : (
+        <td>
+          {noteSymbol}
+          {formatLiquidity(props.liquidity)}
+        </td>
+      )}
     </tr>
   );
 };

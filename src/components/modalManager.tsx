@@ -17,7 +17,6 @@ enum ModalType {
   COLLATERAL,
   DECOLLATERAL,
   BALANCE,
-  
 }
 const StyledPopup = styled(Popup)`
   // use your custom style for ".popup-overlay"
@@ -79,19 +78,18 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   data?: any;
-
 }
 
 const ModalManager = (props: Props) => {
   const tokenState = useToken();
-if(props.isOpen && tokenState[0]) {
-  Mixpanel.events.lendingMarketActions.modalInteraction(
-    tokenState[0].token.wallet,
-    props.modalType.toString(),
-    tokenState[0].token.data.symbol,
-    true
-  );
-}
+  if (props.isOpen && tokenState[0]) {
+    Mixpanel.events.lendingMarketActions.modalInteraction(
+      tokenState[0].token.wallet,
+      props.modalType.toString(),
+      tokenState[0].token.data.symbol,
+      true
+    );
+  }
   return (
     <StyledPopup
       open={props.isOpen}
@@ -117,7 +115,7 @@ if(props.isOpen && tokenState[0]) {
           right: ".5rem",
           width: "40px",
           cursor: "pointer",
-          zIndex:"3"
+          zIndex: "3",
         }}
         alt="close"
         onClick={props.onClose}
@@ -142,7 +140,7 @@ if(props.isOpen && tokenState[0]) {
         <CollatModal onClose={props.onClose} decollateralize />
       )}
       {props.modalType === ModalType.BALANCE && (
-        <BalanceModal value={props.data} onClose={props.onClose}/>
+        <BalanceModal value={props.data} onClose={props.onClose} />
       )}
     </StyledPopup>
   );

@@ -12,6 +12,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
     "typechain:generate": "npm run typechain --target=ethers-v5 ./src/abi/*.json --out-dir=./gen/types"
   },
   "dependencies": {
