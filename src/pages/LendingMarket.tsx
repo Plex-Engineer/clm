@@ -239,7 +239,6 @@ const LendingMarket = () => {
   const { notifications } = useNotifications();
   const [notifs, setNotifs] = useState<any[]>([]);
 
-
   useEffect(() => {
     notifications.forEach((item) => {
       if (
@@ -335,8 +334,8 @@ const LendingMarket = () => {
   const setToken = useSetToken();
 
   const allData = useTokens(networkInfo.account, Number(networkInfo.chainId));
-  let tokens: CTOKEN[] = allData?.[0];
-  let stats = allData?.[1];
+  const tokens: CTOKEN[] = allData?.[0];
+  const stats = allData?.[1];
   const walletBalance = stats?.balance;
 
   function openModalLending() {
@@ -689,7 +688,9 @@ const LendingMarket = () => {
                 }}
               ></div>
             </div>
-            <p style={{width: "100%", textAlign: 'right'}}>{noteSymbol + stats?.totalBorrowLimit.toFixed(2)}</p>
+            <p style={{ width: "100%", textAlign: "right" }}>
+              {noteSymbol + stats?.totalBorrowLimit.toFixed(2)}
+            </p>
           </TinyTable>
         }
         position="top center"
@@ -713,7 +714,6 @@ const LendingMarket = () => {
           )}
         </ToolTip>
       </Popup>
-
 
       <SpecialTabs></SpecialTabs>
 
@@ -830,7 +830,8 @@ const LendingMarket = () => {
         </div>
       </div>
     </Container>
-)};
+  );
+};
 
 const SpecialTabs = () => {
   const TabBar = styled.div`
