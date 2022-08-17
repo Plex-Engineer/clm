@@ -6,7 +6,7 @@ import Popup from "reactjs-popup";
 interface SupplyProps {
   assetName: string;
   assetIcon: string;
-  apy: number;
+  apy: string;
   wallet: number;
   symbol?: string;
   collateral?: boolean;
@@ -18,8 +18,8 @@ interface SupplyProps {
 interface BorrowProps {
   assetName: string;
   assetIcon: string;
-  apy: number;
-  wallet: number;
+  apy: string;
+  wallet: string;
   symbol?: string;
   liquidity: number;
   onClick: () => void;
@@ -28,8 +28,8 @@ interface BorrowProps {
 interface BorrowingProps {
   assetName: string;
   assetIcon: string;
-  apy: number;
-  wallet: number;
+  apy: string;
+  wallet: string;
   symbol?: string;
   balance: string;
   liquidity: number;
@@ -39,9 +39,9 @@ interface BorrowingProps {
 interface SupplyingProps {
   assetName: string;
   assetIcon: string;
-  apy: number;
-  distAPY: number;
-  wallet: number;
+  apy: string;
+  distAPY: string;
+  wallet: string;
   symbol?: string;
   collateral?: boolean;
   balance: string;

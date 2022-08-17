@@ -1,17 +1,23 @@
 import { formatEther } from "@ethersproject/units";
-import { useCalls, useEtherBalance } from "@usedapp/core";
+import { CallResult, useCalls, useEtherBalance } from "@usedapp/core";
 import { BigNumber, Contract } from "ethers";
 import { abi } from "constants/abi";
 import { ethers } from "ethers";
 import { CTOKENS, CTOKEN, CantoTestnet, ADDRESSES } from "cantoui";
 import { cTokensBase, mainnetBasecTokens } from "constants/lendingMarketTokens";
+import { LMBalance, LMToken, LMTokenDetails } from "./interfaces";
 
 const formatUnits = ethers.utils.formatUnits;
 
 export function useTokens(
   account: string | undefined,
   chainId: number
-): any[] | undefined {
+):
+  | {
+      LMTokens: LMToken[];
+      balances: LMTokenDetails;
+    }
+  | undefined {
   const tokens: CTOKEN[] =
     chainId == CantoTestnet.chainId ? cTokensBase : mainnetBasecTokens;
   const address =
@@ -148,11 +154,14 @@ export function useTokens(
   const results =
     useCalls(typeof tokens == typeof CTOKENS ? globalCalls : []) ?? {};
   if (account == undefined) {
-    return [];
+    return undefined;
   }
   const chuckSize = !tokens ? 0 : (results.length - 2) / tokens.length;
   let processedTokens: Array<any>;
-  const array_chunks = (array: any[], chunk_size: number) => {
+  const array_chunks = (
+    array: CallResult<Contract, string>[],
+    chunk_size: number
+  ) => {
     const rep = array.map((array) => array?.value);
     const chunks = [];
 
@@ -167,7 +176,7 @@ export function useTokens(
   }
   if (chuckSize > 0 && results?.[0] != undefined && !results?.[0].error) {
     processedTokens = array_chunks(results, chuckSize);
-    const val = processedTokens.map((tokenData, idx) => {
+    const LMTokens = processedTokens.map((tokenData, idx) => {
       const cash: string = formatUnits(
         tokenData[3][0],
         tokens[idx].underlying.decimals
@@ -242,7 +251,8 @@ export function useTokens(
       )
         ? Number.MAX_SAFE_INTEGER
         : formatUnits(tokenData[12][0], tokens[idx].underlying.decimals);
-      return {
+
+      const rust: LMToken = {
         data: tokens?.[idx],
         wallet: account,
         balanceOf,
@@ -267,12 +277,13 @@ export function useTokens(
         distAPY,
         borrowCap,
       };
+      return rust;
     });
     let totalSupply = 0;
     let totalBorrow = 0;
     let totalBorrowLimit = 0;
     let totalBorrowLimitUsed = 0;
-    val?.forEach((token) => {
+    LMTokens?.forEach((token) => {
       if (token?.inSupplyMarket) {
         totalSupply += Number(token.supplyBalanceinNote);
       }
@@ -292,33 +303,25 @@ export function useTokens(
     const cantoAccrued = formatEther(
       results[results.length - 2]?.value[0] ?? 1
     );
-    const canto = val.find((item) => item.data.symbol == "cCANTO");
-    const balance = {
+    const canto = LMTokens.find((item) => item.data.symbol == "cCANTO");
+
+    const balance: LMBalance = {
       walletBalance: canto?.balanceOf,
       price: canto?.price,
       accrued: cantoAccrued,
       cantroller: address.Comptroller,
       wallet: account,
     };
-    return [
-      val,
-      {
-        totalSupply,
-        totalBorrow,
-        totalBorrowLimit,
-        totalBorrowLimitUsed,
-        balance,
-      },
-    ];
+    const balances: LMTokenDetails = {
+      totalSupply,
+      totalBorrow,
+      totalBorrowLimit,
+      totalBorrowLimitUsed,
+      balance,
+    };
+
+    return { LMTokens, balances };
   }
 
-  //   results.forEach((result, idx) => {
-  //     if (result && result.error) {
-  //       console.error(
-  //         `Error encountered calling 'totalSupply' on ${calls[idx][0].contract.address}: ${result.error.message}`
-  //       );
-  //     }
-  //   });
-  //   console.log(results)
   return undefined;
 }

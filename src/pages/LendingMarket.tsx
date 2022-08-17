@@ -336,8 +336,8 @@ const LendingMarket = () => {
   const setToken = useSetToken();
 
   const allData = useTokens(networkInfo.account, Number(networkInfo.chainId));
-  const tokens: CTOKEN[] = allData?.[0];
-  const stats = allData?.[1];
+  const tokens = allData?.LMTokens;
+  const stats = allData?.balances;
   const walletBalance = stats?.balance;
 
   function openModalLending() {
@@ -360,7 +360,7 @@ const LendingMarket = () => {
 
   function SupplyingTable() {
     //this should prevent the table from showing up if there are not items to be displayed
-    if (tokens?.filter((token: any) => token.inSupplyMarket).length == 0)
+    if (tokens?.filter((token) => token.inSupplyMarket).length == 0)
       return null;
 
     return (
@@ -373,7 +373,7 @@ const LendingMarket = () => {
         >
           {tokens ? (
             tokens
-              .map((token: any) =>
+              .map((token) =>
                 token.inSupplyMarket ? (
                   <SupplyingRow
                     collaterable={Number(token.collateralFactor) > 0}
@@ -387,17 +387,17 @@ const LendingMarket = () => {
                     assetName={token.data.underlying.symbol}
                     apy={token.supplyAPY.toFixed(2)}
                     distAPY={token.distAPY.toFixed(2)}
-                    wallet={Number(formatBalance(token.supplyBalance))}
+                    wallet={formatBalance(token.supplyBalance)}
                     balance={formatBalance(Number(token.supplyBalanceinNote))}
                     symbol={token.data.underlying.symbol}
                     collateral={token.collateral}
-                    onToggle={(state) => {
+                    onToggle={() => {
                       setToken({ token, stats });
                     }}
                   />
                 ) : null
               )
-              .sort((a: any, b: any) => {
+              .sort((a, b) => {
                 return String(a?.props.symbol).localeCompare(b?.props.symbol);
               })
           ) : (
@@ -412,7 +412,7 @@ const LendingMarket = () => {
 
   function BorrowingTable() {
     //this should prevent the table from showing up if there are not items to be displayed
-    if (tokens?.filter((token: any) => token.inBorrowMarket).length == 0)
+    if (tokens?.filter((token) => token.inBorrowMarket).length == 0)
       return null;
 
     return (
@@ -431,7 +431,7 @@ const LendingMarket = () => {
         >
           {tokens ? (
             tokens
-              .map((token: any) =>
+              .map((token) =>
                 token.inBorrowMarket ? (
                   <BorrowedRow
                     key={token.data.address + "borrowed"}
@@ -445,9 +445,10 @@ const LendingMarket = () => {
                     apy={token.borrowAPY.toFixed(2)}
                     balance={formatBalance(token.borrowBalanceinNote)}
                     symbol={token.data.underlying.symbol}
-                    wallet={Number(formatBalance(token.borrowBalance))}
+                    wallet={formatBalance(token.borrowBalance)}
                     liquidity={
-                      (token.borrowBalanceinNote / stats?.totalBorrowLimit) *
+                      (Number(token.borrowBalanceinNote) /
+                        stats?.totalBorrowLimit) *
                       100
                     }
                     onToggle={() => {
@@ -456,7 +457,7 @@ const LendingMarket = () => {
                   />
                 ) : null
               )
-              .sort((a: any, b: any) => {
+              .sort((a, b) => {
                 return String(a?.props.symbol).localeCompare(b?.props.symbol);
               })
           ) : (
@@ -487,10 +488,10 @@ const LendingMarket = () => {
         >
           {tokens ? (
             tokens
-              .map((token: any) =>
+              .map((token) =>
                 !token.inSupplyMarket ? (
                   <SupplyRow
-                    collaterable={token.collateralFactor > 0}
+                    collaterable={Number(token.collateralFactor) > 0}
                     onClick={() => {
                       setToken({ token: token, stats: stats });
                       openModalLending();
@@ -508,7 +509,7 @@ const LendingMarket = () => {
                   />
                 ) : null
               )
-              .sort((a: any, b: any) => {
+              .sort((a, b) => {
                 return String(a?.props.symbol).localeCompare(b?.props.symbol);
               })
           ) : (
@@ -537,7 +538,7 @@ const LendingMarket = () => {
         >
           {tokens ? (
             tokens
-              .map((token: any) =>
+              .map((token) =>
                 !token.inBorrowMarket && !token.data.underlying.isLP ? (
                   <BorrowingRow
                     onClick={() => {
@@ -548,7 +549,7 @@ const LendingMarket = () => {
                     assetIcon={token.data.underlying.icon}
                     assetName={token.data.underlying.symbol}
                     apy={token.borrowAPY.toFixed(2)}
-                    wallet={Number(formatBalance(token.balanceOf))}
+                    wallet={formatBalance(token.balanceOf)}
                     symbol={token.data.underlying.symbol}
                     liquidity={Number(token.liquidity)}
                     onToggle={() => {
@@ -557,7 +558,7 @@ const LendingMarket = () => {
                   />
                 ) : null
               )
-              .sort((a: any, b: any) => {
+              .sort((a, b) => {
                 return String(a?.props.symbol).localeCompare(b?.props.symbol);
               })
           ) : (
@@ -579,23 +580,6 @@ const LendingMarket = () => {
   //then we get the tokens from the getMarkets and set them to the state
   //and also generate stats about the token
   //and this only updates if the account changes (logs in or out)
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
-  let isMobile = dimensions.width < 1000;
-
-  useEffect(() => {
-    function handleResize() {
-      setDimensions({
-        height: window.innerHeight,
-        width: window.innerWidth,
-      });
-    }
-    isMobile = dimensions.width < 1000;
-
-    window.addEventListener("resize", handleResize);
-  }, []);
 
   useEffect(() => {
     setborrowBalance(stats?.totalBorrow.toFixed(2) ?? "000.00");
