@@ -9,7 +9,7 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/jsx-runtime",
-    // "airbnb-base/typescript",
+    "plugin:react-hooks/recommended",
     "prettier",
   ],
   overrides: [],
@@ -26,6 +26,8 @@ module.exports = {
     quotes: ["error", "double"],
     semi: ["error", "always"],
     "prettier/prettier": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
   },
   settings: {
     react: {
