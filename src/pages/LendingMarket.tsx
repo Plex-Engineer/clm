@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import styled from "styled-components";
-import { useNotifications } from "@usedapp/core";
+import { useNotifications, Notification } from "@usedapp/core";
 import { useState, useEffect } from "react";
 import LendingTable from "../components/lending/lendingTable";
 import { useSetToken } from "providers/activeTokenContext";
@@ -237,7 +238,7 @@ const LendingMarket = () => {
   const [supplyBalance, setSupplyBalance] = useState("00.00");
   const [borrowBalance, setborrowBalance] = useState("00.00");
   const { notifications } = useNotifications();
-  const [notifs, setNotifs] = useState<any[]>([]);
+  const [notifs, setNotifs] = useState<Notification[]>([]);
 
   useEffect(() => {
     notifications.forEach((item) => {
@@ -253,6 +254,7 @@ const LendingMarket = () => {
       ) {
         setNotifs(
           notifs.filter(
+            //@ts-ignore
             (localItem) => localItem.transaction.hash != item.transaction.hash
           )
         );
