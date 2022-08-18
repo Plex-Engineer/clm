@@ -25,7 +25,7 @@ export const CantoNav = () => {
 
   useEffect(() => {
     if (!netWorkInfo.isConnected) {
-      alert.show("Failure", <p>this network is not supported on governance, please <a onClick={addNetwork} style={{cursor: "pointer", textDecoration: "underline"}}>switch networks</a></p>)
+      alert.show("Failure", <p>this network is not supported on the lending market, please <a onClick={addNetwork} style={{cursor: "pointer", textDecoration: "underline"}}>switch networks</a></p>)
     } else {
       alert.close();
     }
