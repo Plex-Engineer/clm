@@ -109,7 +109,7 @@ const Details = ({
             }}
           />
           <p>
-            {!isBorrowing ? "supply apy:" : "borrow apy:"}
+            {!isBorrowing ? "supply apr:" : "borrow apr:"}
             {!isBorrowing ? <span>{token.supplyAPY.toFixed(2)}%</span> : <span>{token.borrowAPY.toFixed(2)}%</span>}
           </p>
         </div>
@@ -127,7 +127,7 @@ const Details = ({
             }}
           />
           <p>
-            dist apy <span>{token.distAPY.toFixed(2)}%</span>
+            dist apr <span>{token.distAPY.toFixed(2)}%</span>
           </p>
         </div>
       </Limits>
