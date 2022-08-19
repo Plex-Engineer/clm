@@ -357,7 +357,6 @@ const LendingMarket = () => {
     ? (stats?.totalBorrowLimitUsed / stats?.totalBorrowLimit) * 100
     : 0;
 
-    console.log(stats)
 
   function SupplyingTable() {
     //this should prevent the table from showing up if there are not items to be displayed
