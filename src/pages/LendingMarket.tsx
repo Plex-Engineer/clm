@@ -357,6 +357,8 @@ const LendingMarket = () => {
     ? (stats?.totalBorrowLimitUsed / stats?.totalBorrowLimit) * 100
     : 0;
 
+    console.log(stats)
+
   function SupplyingTable() {
     //this should prevent the table from showing up if there are not items to be displayed
     if (tokens?.filter((token: any) => token.inSupplyMarket).length == 0)
@@ -621,9 +623,12 @@ const LendingMarket = () => {
               }
             }}
           >
-            claim rewards
+            claim LM rewards 
           </Button>
         ) : null}
+      </div>
+      <div style={{textAlign: "right"}}>
+          {stats?.balance?.accrued ? (Number(stats.balance.accrued)).toFixed(2) + " WCANTO " : ""}
       </div>
 
       <Hero>
