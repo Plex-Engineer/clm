@@ -119,6 +119,18 @@ export function useTokens(account: string | undefined, chainId : number): any[] 
           contract: comptroller,
           method:"borrowCaps",
           args: [token.address]
+        },
+        //13
+        {
+          contract: comptroller,
+          method: "compSupplierIndex",
+          args: [token.address, account]
+        },
+        //14
+        {
+          contract: comptroller,
+          method: "compSupplyState",
+          args: [token.address]
         }
       ];}
      ) ?? [];
@@ -179,6 +191,11 @@ export function useTokens(account: string | undefined, chainId : number): any[] 
       const compSpeed = Number(formatEther(tokenData[11][0]));
       const distAPY = getDistributionAPY(compSpeed, cash, Number(price), Number(formatEther(results[results.length-1]?.value[0])));
       const borrowCap = ethers.BigNumber.from(tokenData[12][0]).eq(ethers.BigNumber.from("0")) ? Number.MAX_SAFE_INTEGER : formatUnits(tokenData[12][0], tokens[idx].underlying.decimals);
+
+      //supplierDiff = comptroller.supplyState().index - comptroller.compSupplierIndex(cToken.address, supplier.address)
+      const supplierDIff = BigNumber.from(tokenData[14][0]).sub(tokenData[13][0])
+      const rewards = formatUnits(supplierDIff.mul(tokenData[0][0]), 54)
+      
       return {
         data: tokens?.[idx],
         wallet: account,
@@ -202,13 +219,15 @@ export function useTokens(account: string | undefined, chainId : number): any[] 
         isListed,
         compSpeed,
         distAPY,
-        borrowCap
+        borrowCap,
+        rewards
       };
     });
     let totalSupply = 0;
     let totalBorrow = 0;
     let totalBorrowLimit = 0;
     let totalBorrowLimitUsed = 0;
+    let totalRewards = 0;
     val?.forEach((token) => {
         if (token?.inSupplyMarket) {
           totalSupply += Number(token.supplyBalanceinNote);
@@ -223,6 +242,7 @@ export function useTokens(account: string | undefined, chainId : number): any[] 
             totalBorrowLimitUsed += Number(token.borrowBalanceinNote);
           }
         }
+        totalRewards += Number(token.rewards);
 
       });
       //results.length-2 will get comp accrued method
@@ -231,7 +251,7 @@ export function useTokens(account: string | undefined, chainId : number): any[] 
       const balance = {
         walletBalance : canto?.balanceOf,
         price : canto?.price,
-        accrued : cantoAccrued,
+        accrued : totalRewards,
         cantroller : address.Comptroller,
         wallet : account
       }
