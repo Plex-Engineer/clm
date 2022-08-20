@@ -7,6 +7,7 @@ interface SupplyProps {
   assetName: string;
   assetIcon: string;
   apy: number;
+  distAPY: number;
   wallet: number;
   symbol?: string;
   collateral?: boolean;
@@ -71,7 +72,7 @@ const SupplyRow = (props: SupplyProps) => {
         />{" "}
         <span>{props.assetName}</span>
       </td>
-      <td>{props.apy} %</td>
+      <td> <DualRow top={props.apy + " %"} bottom={props.distAPY + "%"}></DualRow></td>
       <td>
         {props.wallet} {props.symbol}
       </td>
