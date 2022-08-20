@@ -67,6 +67,9 @@ interface IButton {
 }
 
 function truncateByDecimals(amount:string, decimals: number) {
+  if (amount.indexOf('.') == -1) {
+    return amount;
+  }
   return amount.slice(0, amount.indexOf('.') + decimals + 1);
 }
 
@@ -169,6 +172,7 @@ const ReactiveButton = ({
       if (transactionType == TrasanctionType.BORROW && token.borrowCap < Number(amount)) {
         return <DisabledButton>borrow cap has been reached</DisabledButton>
       }
+      console.log(truncateByDecimals(amount, token.data.underlying.decimals))
       return (
         <Button
           onClick={async () => {
