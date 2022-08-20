@@ -26,7 +26,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   color: #fff;
-  margin: 2rem 2%; //TODO: make this dynamic
+  margin: 2rem 1rem; //TODO: make this dynamic
   .typing {
     color: var(--primary-color);
     margin: 2rem 4rem;
@@ -55,11 +55,9 @@ const Container = styled.div`
   }
 
   .flex-h {
-    display: flex;
+    display: sticky;
     margin: 0;
-    justify-content: right;
-    flex-wrap: wrap;
-    /* padding-right: 0.5%; */
+    right: 0;
     button {
       margin: 0;
       width: 15rem;
@@ -147,7 +145,7 @@ export const Button = styled.button`
   padding: 0.2rem 2rem;
   border: 1px solid var(--primary-color);
   justify-content: center;
-  margin: 0 -4rem auto auto;
+  /* margin: 0 -4rem auto auto; */
   width: 14rem;
   display: flex;
   &:hover {
@@ -613,7 +611,7 @@ const LendingMarket = () => {
         }}
         data={walletBalance}
       />
-      <div className="flex-h">
+      <div style={{display: 'flex', justifyContent: "flex-end"}}>
         {networkInfo.isConnected ? (
           <Button
             onClick={() => {
@@ -621,6 +619,7 @@ const LendingMarket = () => {
                 openBalance();
               }
             }}
+            style={{width: "15rem", alignSelf: "right"}}
           >
             claim LM rewards 
           </Button>
