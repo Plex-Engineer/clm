@@ -367,7 +367,7 @@ const LendingMarket = () => {
         <p>supplying</p>
 
         <LendingTable
-          columns={["asset", "apr", "balance", "collateral"]}
+          columns={["asset", "apr", "rewards", "balance", "collateral"]}
           isLending
         >
           {tokens ? (
@@ -393,6 +393,7 @@ const LendingMarket = () => {
                     onToggle={(state) => {
                       setToken({ token, stats });
                     }}
+                    rewards={token.rewards}
                   />
                 ) : null
               )
