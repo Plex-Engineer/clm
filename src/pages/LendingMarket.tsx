@@ -20,7 +20,6 @@ import { toast } from "react-toastify";
 import CypherText from "components/lending/CypherText";
 import { Details } from "hooks/useTransaction";
 import Popup from "reactjs-popup";
-import { CTOKEN } from "cantoui";
 import { useNetworkInfo } from "stores/networkInfo";
 
 const Container = styled.div`

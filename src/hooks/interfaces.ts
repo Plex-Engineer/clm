@@ -22,6 +22,7 @@ export interface LMToken {
   compSpeed: number;
   distAPY: number;
   borrowCap: string | number;
+  rewards: string;
 }
 
 export interface Data {
@@ -54,7 +55,7 @@ export interface LMTokenDetails {
 export interface LMBalance {
   walletBalance: string | undefined;
   price: string | undefined;
-  accrued: string;
+  accrued: number;
   cantroller: string;
   wallet: string;
 }

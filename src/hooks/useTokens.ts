@@ -134,6 +134,18 @@ export function useTokens(
           method: "borrowCaps",
           args: [token.address],
         },
+        //13
+        {
+          contract: comptroller,
+          method: "compSupplierIndex",
+          args: [token.address, account],
+        },
+        //14
+        {
+          contract: comptroller,
+          method: "compSupplyState",
+          args: [token.address],
+        },
       ];
     }) ?? [];
 
@@ -253,6 +265,11 @@ export function useTokens(
         ? Number.MAX_SAFE_INTEGER
         : formatUnits(tokenData[12][0], tokens[idx].underlying.decimals);
 
+      //supplierDiff = comptroller.supplyState().index - comptroller.compSupplierIndex(cToken.address, supplier.address)
+      const supplierDIff = BigNumber.from(tokenData[14][0]).sub(
+        tokenData[13][0]
+      );
+      const rewards = formatUnits(supplierDIff.mul(tokenData[0][0]), 54);
       const rust: LMToken = {
         data: tokens?.[idx],
         wallet: account,
@@ -277,6 +294,7 @@ export function useTokens(
         compSpeed,
         distAPY,
         borrowCap,
+        rewards,
       };
       return rust;
     });
@@ -284,6 +302,7 @@ export function useTokens(
     let totalBorrow = 0;
     let totalBorrowLimit = 0;
     let totalBorrowLimitUsed = 0;
+    let totalRewards = 0;
     LMTokens?.forEach((token) => {
       if (token?.inSupplyMarket) {
         totalSupply += Number(token.supplyBalanceinNote);
@@ -299,6 +318,7 @@ export function useTokens(
           totalBorrowLimitUsed += Number(token.borrowBalanceinNote);
         }
       }
+      totalRewards += Number(token.rewards);
     });
     //results.length-2 will get comp accrued method
     const cantoAccrued = formatEther(
@@ -309,7 +329,7 @@ export function useTokens(
     const balance: LMBalance = {
       walletBalance: canto?.balanceOf,
       price: canto?.price,
-      accrued: cantoAccrued,
+      accrued: totalRewards,
       cantroller: address.Comptroller,
       wallet: account,
     };
