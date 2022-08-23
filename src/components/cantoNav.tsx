@@ -29,7 +29,7 @@ export const CantoNav = () => {
       alert.show(
         "Failure",
         <p>
-          this network is not supported on governance, please{" "}
+          this network is not supported on the lending market, please{" "}
           <a
             onClick={addNetwork}
             style={{ cursor: "pointer", textDecoration: "underline" }}
