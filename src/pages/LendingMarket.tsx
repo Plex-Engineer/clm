@@ -368,7 +368,7 @@ const LendingMarket = () => {
         <p>supplying</p>
 
         <LendingTable
-          columns={["asset", "apy", "balance", "collateral"]}
+          columns={["asset", "apr", "balance", "collateral"]}
           isLending
         >
           {tokens ? (
@@ -426,7 +426,7 @@ const LendingMarket = () => {
         </p>
 
         <LendingTable
-          columns={["asset", "apy/accrued", "balance", "% of limit"]}
+          columns={["asset", "apr/accrued", "balance", "% of limit"]}
           isLending={false}
         >
           {tokens ? (
@@ -483,7 +483,7 @@ const LendingMarket = () => {
       <div className="left">
         <p>available</p>
         <LendingTable
-          columns={["asset", "apy", "wallet", "collateral"]}
+          columns={["asset", "apr", "wallet", "collateral"]}
           isLending
         >
           {tokens ? (
@@ -533,7 +533,7 @@ const LendingMarket = () => {
           available
         </p>
         <LendingTable
-          columns={["asset", "apy", "wallet", "liquidity"]}
+          columns={["asset", "apr", "wallet", "liquidity"]}
           isLending={false}
         >
           {tokens ? (
