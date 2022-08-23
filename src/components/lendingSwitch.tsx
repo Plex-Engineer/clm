@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { ModalManager, ModalType } from "./modalManager";
 import { useState } from "react";
 import { ToolTip } from "./Tooltip";
-
 const Wrapper = styled.label`
   /* The switch - the box around the slider */
   position: relative;
