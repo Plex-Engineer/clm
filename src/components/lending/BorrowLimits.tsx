@@ -104,7 +104,7 @@ const Details = ({
             }}
           />
           <p>
-            {!isBorrowing ? "supply apr:" : "borrow apr:"}
+            {!isBorrowing ? "supply apr:" : "borrow rate:"}
             {!isBorrowing ? (
               <span>{token.supplyAPY.toFixed(2)}%</span>
             ) : (
@@ -115,6 +115,7 @@ const Details = ({
         <div
           style={{
             textAlign: "right",
+            visibility: isBorrowing ? "hidden" : "visible",
           }}
         >
           <img

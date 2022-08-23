@@ -606,9 +606,15 @@ const LendingMarket = () => {
               }
             }}
           >
-            claim rewards
+            claim LM rewards
           </Button>
         ) : null}
+      </div>
+
+      <div style={{ textAlign: "right" }}>
+        {stats?.balance?.accrued
+          ? Number(stats.balance.accrued).toFixed(2) + " WCANTO "
+          : ""}
       </div>
 
       <Hero>
