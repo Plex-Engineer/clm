@@ -66,6 +66,9 @@ interface IButton {
 }
 
 function truncateByDecimals(amount: string, decimals: number) {
+  if (amount.indexOf(".") == -1) {
+    return amount;
+  }
   return amount.slice(0, amount.indexOf(".") + decimals + 1);
 }
 
