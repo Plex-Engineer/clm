@@ -49,6 +49,7 @@ interface SupplyingProps {
   onToggle: (state: boolean) => void;
   onClick?: () => void;
   collaterable: boolean;
+  rewards: string;
 }
 
 interface ITransactionProps {
@@ -200,6 +201,7 @@ const SupplyingRow = (props: SupplyingProps) => {
       <td>
         <DualRow top={props.apy + " %"} bottom={props.distAPY + "%"}></DualRow>
       </td>
+      <td>{Number(props.rewards).toFixed(2)} WCANTO</td>
       <td>
         <DualRow
           bottom={noteSymbol + props.balance}
