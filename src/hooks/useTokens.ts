@@ -321,9 +321,9 @@ export function useTokens(
       totalRewards += Number(token.rewards);
     });
     //results.length-2 will get comp accrued method
-    const cantoAccrued = formatEther(
-      results[results.length - 2]?.value[0] ?? 1
-    );
+    // const cantoAccrued = formatEther(
+    //   results[results.length - 2]?.value[0] ?? 1
+    // );
     const canto = LMTokens.find((item) => item.data.symbol == "cCANTO");
 
     const balance: LMBalance = {

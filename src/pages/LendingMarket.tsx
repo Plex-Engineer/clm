@@ -26,7 +26,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   color: #fff;
-  margin: 2rem 2%; //TODO: make this dynamic
+  margin: 2rem 1rem;
   .typing {
     color: var(--primary-color);
     margin: 2rem 4rem;
@@ -296,9 +296,11 @@ const LendingMarket = () => {
             msg.type = "claimed";
             break;
         }
+
+        const errormsg = isSuccesful ? "" : "not";
         const msged =
           (Number(msg.amount) > 0 ? Number(msg.amount).toFixed(2) : "") +
-          ` ${msg.name} has been ${msg.type}`;
+          ` ${msg.name} has ${errormsg} been ${msg.type}`;
 
         toast(msged, {
           position: "top-right",
