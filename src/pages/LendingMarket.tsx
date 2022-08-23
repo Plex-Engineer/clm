@@ -501,6 +501,7 @@ const LendingMarket = () => {
                     assetIcon={token.data.underlying.icon}
                     assetName={token.data.underlying.symbol}
                     apy={token.supplyAPY.toFixed(2)}
+                    distAPY={token.distAPY.toFixed(2)}
                     wallet={Number(formatBalance(token.balanceOf))}
                     symbol={token.data.underlying.symbol}
                     collateral={token.collateral}

@@ -7,6 +7,7 @@ interface SupplyProps {
   assetName: string;
   assetIcon: string;
   apy: string;
+  distAPY: string;
   wallet: number;
   symbol?: string;
   collateral?: boolean;
@@ -71,7 +72,9 @@ const SupplyRow = (props: SupplyProps) => {
         />{" "}
         <span>{props.assetName}</span>
       </td>
-      <td>{props.apy} %</td>
+      <td>
+        <DualRow top={props.apy + " %"} bottom={props.distAPY + "%"}></DualRow>
+      </td>
       <td>
         {props.wallet} {props.symbol}
       </td>
@@ -103,10 +106,6 @@ function formatLiquidity(liquidity: number) {
   if (liquidity < 1000000000) return (liquidity / 1000000).toFixed(1) + "M";
 
   return (liquidity / 1000000000).toFixed(1) + "B";
-
-  //TODO : temp fix
-  const fm = (liquidity / 1000000).toPrecision(3);
-  return fm.substring(0, fm.length - 4);
 }
 const ToolTip = styled.div`
   border: 1px solid var(--primary-color);
