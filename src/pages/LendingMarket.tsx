@@ -362,7 +362,7 @@ const LendingMarket = () => {
     setIsOpen(true);
   }
   const borrowPercentage = stats?.totalBorrowLimitUsed
-    ? (stats?.totalBorrowLimitUsed / stats?.totalBorrowLimit) * 100
+    ? (stats?.totalBorrowLimitUsed / (stats?.totalBorrowLimit ?? 0)) * 100
     : 0;
 
   function SupplyingTable() {
@@ -455,7 +455,7 @@ const LendingMarket = () => {
                     wallet={formatBalance(token.borrowBalance)}
                     liquidity={
                       (Number(token.borrowBalanceinNote) /
-                        stats?.totalBorrowLimit) *
+                        (stats?.totalBorrowLimit ?? 0)) *
                       100
                     }
                     onToggle={() => {
@@ -590,8 +590,8 @@ const LendingMarket = () => {
   //and this only updates if the account changes (logs in or out)
 
   useEffect(() => {
-    setborrowBalance(stats?.totalBorrow.toFixed(2) ?? "000.00");
-    setSupplyBalance(stats?.totalSupply.toFixed(2) ?? "000.00");
+    setborrowBalance(stats?.totalBorrow?.toFixed(2) ?? "000.00");
+    setSupplyBalance(stats?.totalSupply?.toFixed(2) ?? "000.00");
     ReactTooltip.rebuild();
 
     // console.log(stats?.totalBorrow.toFixed(6))
@@ -604,6 +604,7 @@ const LendingMarket = () => {
   return (
     <Container className="lendingMarket">
       <ReactTooltip id="foo" />
+      <ToolTip data-tooltip="hello world">Tooltip</ToolTip>
 
       <ModalManager
         isOpen={isOpen}
@@ -628,7 +629,7 @@ const LendingMarket = () => {
       </div>
 
       <div style={{ textAlign: "right" }}>
-        {stats?.balance?.accrued
+        {stats?.balance.accrued
           ? Number(stats.balance.accrued).toFixed(2) + " WCANTO "
           : ""}
       </div>
@@ -697,7 +698,7 @@ const LendingMarket = () => {
               ></div>
             </div>
             <p style={{ width: "100%", textAlign: "right" }}>
-              {noteSymbol + stats?.totalBorrowLimit.toFixed(2)}
+              {noteSymbol + (stats?.totalBorrowLimit?.toFixed(2) ?? "000.00")}
             </p>
           </TinyTable>
         }
@@ -711,13 +712,17 @@ const LendingMarket = () => {
               you will be liquidated if you go above your borrow limit <br></br>
               Liquidity Cushion:{" "}
               {noteSymbol +
-                (stats?.totalBorrowLimit - stats?.totalBorrow).toFixed(2)}
+                (
+                  (stats?.totalBorrowLimit ?? 0) - (stats?.totalBorrow ?? 0)
+                ).toFixed(2)}
             </p>
           ) : (
             <p>
               you will be liquidated soon<br></br> Liquidity Cushion:{" "}
               {noteSymbol +
-                (stats?.totalBorrowLimit - stats?.totalBorrow).toFixed(2)}
+                (
+                  (stats?.totalBorrowLimit ?? 0) - (stats?.totalBorrow ?? 0)
+                ).toFixed(2)}
             </p>
           )}
         </ToolTipL>
