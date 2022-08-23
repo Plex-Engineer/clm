@@ -16,7 +16,9 @@ const Table = styled.table`
     font-size: 14px;
     background-color: #06fc9a1b;
   }
-
+  td {
+    display: table-cell;
+  }
   th {
     padding: 8px;
     font-weight: 400;
@@ -72,7 +74,7 @@ const LendingTable = (props: Props) => {
   return (
     <div
       style={{
-        overflowX: "auto",
+        // overflowX: "auto",
         width: "100%",
       }}
     >

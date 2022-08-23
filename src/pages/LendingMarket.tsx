@@ -4,12 +4,15 @@ import { useNotifications, Notification } from "@usedapp/core";
 import { useState, useEffect } from "react";
 import LendingTable from "../components/lending/lendingTable";
 import { useSetToken } from "providers/activeTokenContext";
+import ReactTooltip from "react-tooltip";
+
 import {
   SupplyRow,
   SupplyingRow,
   BorrowingRow,
   BorrowedRow,
   TransactionRow,
+  LoadingRow,
 } from "../components/lending/lendingRow";
 
 import { ModalType, ModalManager } from "../components/modalManager";
@@ -21,6 +24,7 @@ import CypherText from "components/lending/CypherText";
 import { Details } from "hooks/useTransaction";
 import Popup from "reactjs-popup";
 import { useNetworkInfo } from "stores/networkInfo";
+import { ToolTip } from "components/Tooltip";
 
 const Container = styled.div`
   display: flex;
@@ -240,6 +244,8 @@ const LendingMarket = () => {
   const [notifs, setNotifs] = useState<Notification[]>([]);
 
   useEffect(() => {
+    ReactTooltip.rebuild();
+
     notifications.forEach((item) => {
       if (
         item.type == "transactionStarted" &&
@@ -404,7 +410,7 @@ const LendingMarket = () => {
               })
           ) : (
             <tr>
-              <td>loading</td>
+              <LoadingRow colSpan={5}>loading</LoadingRow>
             </tr>
           )}
         </LendingTable>
@@ -426,7 +432,6 @@ const LendingMarket = () => {
         >
           borrowing
         </p>
-
         <LendingTable
           columns={["asset", "apr/accrued", "balance", "% of limit"]}
           isLending={false}
@@ -464,7 +469,7 @@ const LendingMarket = () => {
               })
           ) : (
             <tr>
-              <td>loading</td>
+              <LoadingRow colSpan={4}>loading</LoadingRow>
             </tr>
           )}
         </LendingTable>
@@ -472,7 +477,7 @@ const LendingMarket = () => {
     );
   }
 
-  const ToolTip = styled.div`
+  const ToolTipL = styled.div`
     border: 1px solid var(--primary-color);
     background-color: #111;
     padding: 1rem;
@@ -517,7 +522,7 @@ const LendingMarket = () => {
               })
           ) : (
             <tr>
-              <td>loading</td>
+              <LoadingRow colSpan={4}>loading</LoadingRow>
             </tr>
           )}
         </LendingTable>
@@ -566,7 +571,7 @@ const LendingMarket = () => {
               })
           ) : (
             <tr>
-              <td>loading</td>
+              <LoadingRow colSpan={4}>loading</LoadingRow>
             </tr>
           )}
         </LendingTable>
@@ -587,11 +592,19 @@ const LendingMarket = () => {
   useEffect(() => {
     setborrowBalance(stats?.totalBorrow.toFixed(2) ?? "000.00");
     setSupplyBalance(stats?.totalSupply.toFixed(2) ?? "000.00");
+    ReactTooltip.rebuild();
+
     // console.log(stats?.totalBorrow.toFixed(6))
   }, [tokens]);
 
+  useEffect(() => {
+    ReactTooltip.rebuild();
+  });
+
   return (
     <Container className="lendingMarket">
+      <ReactTooltip id="foo" />
+
       <ModalManager
         isOpen={isOpen}
         modalType={modalType}
@@ -692,7 +705,7 @@ const LendingMarket = () => {
         on={["hover", "focus"]}
         arrow={true}
       >
-        <ToolTip>
+        <ToolTipL>
           {borrowPercentage < 80 ? (
             <p>
               you will be liquidated if you go above your borrow limit <br></br>
@@ -707,7 +720,7 @@ const LendingMarket = () => {
                 (stats?.totalBorrowLimit - stats?.totalBorrow).toFixed(2)}
             </p>
           )}
-        </ToolTip>
+        </ToolTipL>
       </Popup>
 
       <SpecialTabs></SpecialTabs>

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import LendingSwitch from "../lendingSwitch";
 import { noteSymbol } from "utils";
 import Popup from "reactjs-popup";
+import { ToolTip } from "components/Tooltip";
 
 interface SupplyProps {
   assetName: string;
@@ -108,13 +109,6 @@ function formatLiquidity(liquidity: number) {
 
   return (liquidity / 1000000000).toFixed(1) + "B";
 }
-const ToolTip = styled.div`
-  border: 1px solid var(--primary-color);
-  background-color: #111;
-  padding: 1rem;
-  /* width: 20rem; */
-  color: white;
-`;
 
 const BorrowingRow = (props: BorrowProps) => {
   return (
@@ -127,9 +121,12 @@ const BorrowingRow = (props: BorrowProps) => {
         {props.wallet} {props.symbol}
       </td>
       {props.assetName == "NOTE" ? (
-        <Popup trigger={<td>N/A</td>} on={["hover", "focus"]}>
-          <ToolTip>Note Liquidity Is Infinite</ToolTip>
-        </Popup>
+        // <Popup trigger={<td>N/A</td>} on={["hover", "focus"]}>
+        //   <ToolTip>Note Liquidity Is Infinite</ToolTip>
+        // </Popup>
+        <ToolTip as={"td"} data-tooltip="Note Liquidity Is Infinite">
+          N/A
+        </ToolTip>
       ) : (
         <td>
           {noteSymbol}
@@ -144,6 +141,7 @@ interface Iitems {
   top: string;
   bottom: string;
 }
+
 const DualRow = ({ top, bottom }: Iitems) => {
   return (
     <div
@@ -236,4 +234,17 @@ const TransactionRow = (props: ITransactionProps) => {
   );
 };
 
-export { SupplyRow, SupplyingRow, BorrowingRow, BorrowedRow, TransactionRow };
+const LoadingRow = styled.td`
+  display: table-cell !important;
+  text-transform: lowercase !important;
+  text-align: center !important;
+`;
+
+export {
+  SupplyRow,
+  SupplyingRow,
+  BorrowingRow,
+  BorrowedRow,
+  TransactionRow,
+  LoadingRow,
+};

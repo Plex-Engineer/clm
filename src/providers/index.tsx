@@ -36,7 +36,7 @@ export const CantoTestnet: Chain = {
 export const CantoMainnet: Chain = {
   chainId: CantoMain.chainId,
   chainName: CantoMain.name,
-  rpcUrl: NodeAddresses.CantoMainnet.ChandraRPC,
+  rpcUrl: NodeAddresses.CantoMainnet.Plex.rpcUrl,
   isTestChain: CantoMain.isTestChain,
   isLocalChain: false,
   multicallAddress: "0x210b88d5Ad4BEbc8FAC4383cC7F84Cd4F03d18c6",
@@ -50,7 +50,7 @@ const config: Config = {
   networks: [CantoTestnet, CantoMainnet],
   readOnlyUrls: {
     [CantoTestnet.chainId]: CantoTest.rpcUrl,
-    [CantoMainnet.chainId]: NodeAddresses.CantoMainnet.ChandraRPC,
+    [CantoMainnet.chainId]: NodeAddresses.CantoMainnet.Plex.rpcUrl,
   },
   noMetamaskDeactivate: true,
 };

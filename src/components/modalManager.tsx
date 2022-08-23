@@ -66,11 +66,11 @@ const StyledPopup = styled(Popup)`
     }
   }
 
-  @media (max-width: 1000px) {
+  /* @media (max-width: 1000px) {
     &-content {
       width: 100vw;
     }
-  }
+  } */
 `;
 
 interface Props {
