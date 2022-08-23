@@ -42,7 +42,7 @@ export function useTokens(
 
   function getDistributionAPY(
     compSpeed: number,
-    tokensupply: any,
+    tokensupply: number,
     tokenPrice: number,
     priceOfCanto: number
   ) {
@@ -157,6 +157,7 @@ export function useTokens(
     return undefined;
   }
   const chuckSize = !tokens ? 0 : (results.length - 2) / tokens.length;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let processedTokens: Array<any>;
   const array_chunks = (
     array: CallResult<Contract, string>[],
@@ -242,7 +243,7 @@ export function useTokens(
       const compSpeed = Number(formatEther(tokenData[11][0]));
       const distAPY = getDistributionAPY(
         compSpeed,
-        cash,
+        Number(cash),
         Number(price),
         Number(formatEther(results[results.length - 1]?.value[0]))
       );
