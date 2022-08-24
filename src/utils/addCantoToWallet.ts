@@ -3,7 +3,6 @@ import { CantoMainnet, NodeAddresses } from "cantoui";
 import { ethers } from "ethers";
 
 export function addNetwork() {
-  console.log(window);
   //@ts-ignore
   if (window.ethereum) {
     //@ts-ignore
@@ -25,7 +24,7 @@ export function addNetwork() {
         ],
       })
       .catch((error: any) => {
-        // console.log(error);
+        console.log(error);
       });
   }
 }

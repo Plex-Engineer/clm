@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import LendingSwitch from "../lendingSwitch";
 import { noteSymbol } from "utils";
-import Popup from "reactjs-popup";
 import { ToolTip } from "components/Tooltip";
 
 interface SupplyProps {

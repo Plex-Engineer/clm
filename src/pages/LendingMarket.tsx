@@ -24,7 +24,6 @@ import CypherText from "components/lending/CypherText";
 import { Details } from "hooks/useTransaction";
 import Popup from "reactjs-popup";
 import { useNetworkInfo } from "stores/networkInfo";
-import { ToolTip } from "components/Tooltip";
 
 const Container = styled.div`
   display: flex;
@@ -856,7 +855,6 @@ const SpecialTabs = () => {
       cursor: pointer;
     }
   `;
-  const [showSupply, setShowSupply] = useState(true);
 
   return (
     <TabBar>
