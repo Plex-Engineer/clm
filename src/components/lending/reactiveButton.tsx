@@ -124,6 +124,8 @@ const ReactiveButton = ({
         return redeemState;
       case TrasanctionType.ENABLE:
         return enableState;
+      default:
+        return supplyState;
     }
   }
   function showText() {
@@ -138,6 +140,8 @@ const ReactiveButton = ({
         return "Withdraw";
       case TrasanctionType.ENABLE:
         return "Enable";
+      default:
+        return "Supply";
     }
   }
 

@@ -116,7 +116,6 @@ const SupplyModal = ({ onClose }: IProps) => {
 
   function resetInput() {
     //if in supply tab and allowance is true or if withdraw is true
-    console.log("withdrawing " + isWithdrawing);
     if ((!isWithdrawing && token.allowance) || isWithdrawing) {
       setInputState(InputState.ENTERAMOUNT);
     } else {
@@ -359,7 +358,6 @@ const SupplyModal = ({ onClose }: IProps) => {
     <Container
       onScroll={(e) => {
         e.preventDefault();
-        console.log("scrolling");
       }}
     >
       {["PendingSignature", "Mining", "Success", "Fail", "Exception"].includes(
