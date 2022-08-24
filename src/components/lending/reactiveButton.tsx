@@ -178,6 +178,7 @@ const ReactiveButton = ({
       ) {
         return <DisabledButton>borrow cap has been reached</DisabledButton>;
       }
+      console.log(truncateByDecimals(amount, token.data.underlying.decimals))
       return (
         <Button
           onClick={async () => {

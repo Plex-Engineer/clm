@@ -59,11 +59,9 @@ const Container = styled.div`
   }
 
   .flex-h {
-    display: flex;
+    display: sticky;
     margin: 0;
-    justify-content: right;
-    flex-wrap: wrap;
-    /* padding-right: 0.5%; */
+    right: 0;
     button {
       margin: 0;
       width: 15rem;
@@ -151,7 +149,7 @@ export const Button = styled.button`
   padding: 0.2rem 2rem;
   border: 1px solid var(--primary-color);
   justify-content: center;
-  margin: 0 -4rem auto auto;
+  /* margin: 0 -4rem auto auto; */
   width: 14rem;
   display: flex;
   &:hover {
@@ -365,6 +363,7 @@ const LendingMarket = () => {
     ? (stats?.totalBorrowLimitUsed / (stats?.totalBorrowLimit ?? 0)) * 100
     : 0;
 
+
   function SupplyingTable() {
     //this should prevent the table from showing up if there are not items to be displayed
     if (tokens?.filter((token) => token.inSupplyMarket).length == 0)
@@ -402,6 +401,7 @@ const LendingMarket = () => {
                     onToggle={() => {
                       setToken({ token, stats });
                     }}
+                    rewards={token.rewards}
                   />
                 ) : null
               )
@@ -614,7 +614,7 @@ const LendingMarket = () => {
         }}
         data={walletBalance}
       />
-      <div className="flex-h">
+      <div style={{display: 'flex', justifyContent: "flex-end"}}>
         {networkInfo.isConnected ? (
           <Button
             onClick={() => {
@@ -622,10 +622,14 @@ const LendingMarket = () => {
                 openBalance();
               }
             }}
+            style={{width: "15rem", alignSelf: "right"}}
           >
             claim LM rewards
           </Button>
         ) : null}
+      </div>
+      <div style={{textAlign: "right"}}>
+          {stats?.balance?.accrued ? (Number(stats.balance.accrued)).toFixed(2) + " WCANTO " : ""}
       </div>
 
       <div style={{ textAlign: "right" }}>
