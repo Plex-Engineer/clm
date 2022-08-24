@@ -401,7 +401,6 @@ const LendingMarket = () => {
                     onToggle={() => {
                       setToken({ token, stats });
                     }}
-                    rewards={token.rewards}
                   />
                 ) : null
               )
