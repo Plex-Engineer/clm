@@ -363,7 +363,6 @@ const LendingMarket = () => {
     ? (stats?.totalBorrowLimitUsed / (stats?.totalBorrowLimit ?? 0)) * 100
     : 0;
 
-
   function SupplyingTable() {
     //this should prevent the table from showing up if there are not items to be displayed
     if (tokens?.filter((token) => token.inSupplyMarket).length == 0)
@@ -603,7 +602,6 @@ const LendingMarket = () => {
   return (
     <Container className="lendingMarket">
       <ReactTooltip id="foo" />
-      <ToolTip data-tooltip="hello world">Tooltip</ToolTip>
 
       <ModalManager
         isOpen={isOpen}
@@ -613,7 +611,7 @@ const LendingMarket = () => {
         }}
         data={walletBalance}
       />
-      <div style={{display: 'flex', justifyContent: "flex-end"}}>
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
         {networkInfo.isConnected ? (
           <Button
             onClick={() => {
@@ -621,16 +619,12 @@ const LendingMarket = () => {
                 openBalance();
               }
             }}
-            style={{width: "15rem", alignSelf: "right"}}
+            style={{ width: "15rem", alignSelf: "right" }}
           >
             claim LM rewards
           </Button>
         ) : null}
       </div>
-      <div style={{textAlign: "right"}}>
-          {stats?.balance?.accrued ? (Number(stats.balance.accrued)).toFixed(2) + " WCANTO " : ""}
-      </div>
-
       <div style={{ textAlign: "right" }}>
         {stats?.balance.accrued
           ? Number(stats.balance.accrued).toFixed(2) + " WCANTO "

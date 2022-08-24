@@ -126,7 +126,7 @@ const LendingSwitch = (props: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   if (props.disabled) {
     return (
-      <ToolTip data-tooltip="You cannot use this asset as collateral at the moment">
+      <ToolTip data-tooltip="this asset cannot be collateralized">
         <DisabledWrapper
           className="switch"
           data-tip="random text"
