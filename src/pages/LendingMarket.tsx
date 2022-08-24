@@ -1,14 +1,18 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import styled from "styled-components";
-import { useNotifications } from "@usedapp/core";
+import { useNotifications, Notification } from "@usedapp/core";
 import { useState, useEffect } from "react";
 import LendingTable from "../components/lending/lendingTable";
 import { useSetToken } from "providers/activeTokenContext";
+import ReactTooltip from "react-tooltip";
+
 import {
   SupplyRow,
   SupplyingRow,
   BorrowingRow,
   BorrowedRow,
   TransactionRow,
+  LoadingRow,
 } from "../components/lending/lendingRow";
 
 import { ModalType, ModalManager } from "../components/modalManager";
@@ -19,14 +23,14 @@ import { toast } from "react-toastify";
 import CypherText from "components/lending/CypherText";
 import { Details } from "hooks/useTransaction";
 import Popup from "reactjs-popup";
-import { CTOKEN } from "cantoui";
 import { useNetworkInfo } from "stores/networkInfo";
+import { ToolTip } from "components/Tooltip";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   color: #fff;
-  margin: 2rem 1rem; //TODO: make this dynamic
+  margin: 2rem 1rem;
   .typing {
     color: var(--primary-color);
     margin: 2rem 4rem;
@@ -235,10 +239,11 @@ const LendingMarket = () => {
   const [supplyBalance, setSupplyBalance] = useState("00.00");
   const [borrowBalance, setborrowBalance] = useState("00.00");
   const { notifications } = useNotifications();
-  const [notifs, setNotifs] = useState<any[]>([]);
-
+  const [notifs, setNotifs] = useState<Notification[]>([]);
 
   useEffect(() => {
+    ReactTooltip.rebuild();
+
     notifications.forEach((item) => {
       if (
         item.type == "transactionStarted" &&
@@ -252,6 +257,7 @@ const LendingMarket = () => {
       ) {
         setNotifs(
           notifs.filter(
+            //@ts-ignore
             (localItem) => localItem.transaction.hash != item.transaction.hash
           )
         );
@@ -294,6 +300,7 @@ const LendingMarket = () => {
             msg.type = "claimed";
             break;
         }
+
         const errormsg = isSuccesful ? "" : "not";
         const msged =
           (Number(msg.amount) > 0 ? Number(msg.amount).toFixed(2) : "") +
@@ -334,8 +341,8 @@ const LendingMarket = () => {
   const setToken = useSetToken();
 
   const allData = useTokens(networkInfo.account, Number(networkInfo.chainId));
-  let tokens: CTOKEN[] = allData?.[0];
-  let stats = allData?.[1];
+  const tokens = allData?.LMTokens;
+  const stats = allData?.balances;
   const walletBalance = stats?.balance;
 
   function openModalLending() {
@@ -353,13 +360,12 @@ const LendingMarket = () => {
     setIsOpen(true);
   }
   const borrowPercentage = stats?.totalBorrowLimitUsed
-    ? (stats?.totalBorrowLimitUsed / stats?.totalBorrowLimit) * 100
+    ? (stats?.totalBorrowLimitUsed / (stats?.totalBorrowLimit ?? 0)) * 100
     : 0;
-
 
   function SupplyingTable() {
     //this should prevent the table from showing up if there are not items to be displayed
-    if (tokens?.filter((token: any) => token.inSupplyMarket).length == 0)
+    if (tokens?.filter((token) => token.inSupplyMarket).length == 0)
       return null;
 
     return (
@@ -372,7 +378,7 @@ const LendingMarket = () => {
         >
           {tokens ? (
             tokens
-              .map((token: any) =>
+              .map((token) =>
                 token.inSupplyMarket ? (
                   <SupplyingRow
                     collaterable={Number(token.collateralFactor) > 0}
@@ -386,23 +392,23 @@ const LendingMarket = () => {
                     assetName={token.data.underlying.symbol}
                     apy={token.supplyAPY.toFixed(2)}
                     distAPY={token.distAPY.toFixed(2)}
-                    wallet={Number(formatBalance(token.supplyBalance))}
+                    wallet={formatBalance(token.supplyBalance)}
                     balance={formatBalance(Number(token.supplyBalanceinNote))}
                     symbol={token.data.underlying.symbol}
                     collateral={token.collateral}
-                    onToggle={(state) => {
+                    rewards={token.rewards}
+                    onToggle={() => {
                       setToken({ token, stats });
                     }}
-                    rewards={token.rewards}
                   />
                 ) : null
               )
-              .sort((a: any, b: any) => {
+              .sort((a, b) => {
                 return String(a?.props.symbol).localeCompare(b?.props.symbol);
               })
           ) : (
             <tr>
-              <td>loading</td>
+              <LoadingRow colSpan={5}>loading</LoadingRow>
             </tr>
           )}
         </LendingTable>
@@ -412,7 +418,7 @@ const LendingMarket = () => {
 
   function BorrowingTable() {
     //this should prevent the table from showing up if there are not items to be displayed
-    if (tokens?.filter((token: any) => token.inBorrowMarket).length == 0)
+    if (tokens?.filter((token) => token.inBorrowMarket).length == 0)
       return null;
 
     return (
@@ -424,14 +430,13 @@ const LendingMarket = () => {
         >
           borrowing
         </p>
-
         <LendingTable
           columns={["asset", "apr/accrued", "balance", "% of limit"]}
           isLending={false}
         >
           {tokens ? (
             tokens
-              .map((token: any) =>
+              .map((token) =>
                 token.inBorrowMarket ? (
                   <BorrowedRow
                     key={token.data.address + "borrowed"}
@@ -445,9 +450,10 @@ const LendingMarket = () => {
                     apy={token.borrowAPY.toFixed(2)}
                     balance={formatBalance(token.borrowBalanceinNote)}
                     symbol={token.data.underlying.symbol}
-                    wallet={Number(formatBalance(token.borrowBalance))}
+                    wallet={formatBalance(token.borrowBalance)}
                     liquidity={
-                      (token.borrowBalanceinNote / stats?.totalBorrowLimit) *
+                      (Number(token.borrowBalanceinNote) /
+                        (stats?.totalBorrowLimit ?? 0)) *
                       100
                     }
                     onToggle={() => {
@@ -456,12 +462,12 @@ const LendingMarket = () => {
                   />
                 ) : null
               )
-              .sort((a: any, b: any) => {
+              .sort((a, b) => {
                 return String(a?.props.symbol).localeCompare(b?.props.symbol);
               })
           ) : (
             <tr>
-              <td>loading</td>
+              <LoadingRow colSpan={4}>loading</LoadingRow>
             </tr>
           )}
         </LendingTable>
@@ -469,7 +475,7 @@ const LendingMarket = () => {
     );
   }
 
-  const ToolTip = styled.div`
+  const ToolTipL = styled.div`
     border: 1px solid var(--primary-color);
     background-color: #111;
     padding: 1rem;
@@ -487,10 +493,10 @@ const LendingMarket = () => {
         >
           {tokens ? (
             tokens
-              .map((token: any) =>
+              .map((token) =>
                 !token.inSupplyMarket ? (
                   <SupplyRow
-                    collaterable={token.collateralFactor > 0}
+                    collaterable={Number(token.collateralFactor) > 0}
                     onClick={() => {
                       setToken({ token: token, stats: stats });
                       openModalLending();
@@ -509,12 +515,12 @@ const LendingMarket = () => {
                   />
                 ) : null
               )
-              .sort((a: any, b: any) => {
+              .sort((a, b) => {
                 return String(a?.props.symbol).localeCompare(b?.props.symbol);
               })
           ) : (
             <tr>
-              <td>loading</td>
+              <LoadingRow colSpan={4}>loading</LoadingRow>
             </tr>
           )}
         </LendingTable>
@@ -538,7 +544,7 @@ const LendingMarket = () => {
         >
           {tokens ? (
             tokens
-              .map((token: any) =>
+              .map((token) =>
                 !token.inBorrowMarket && !token.data.underlying.isLP ? (
                   <BorrowingRow
                     onClick={() => {
@@ -549,7 +555,7 @@ const LendingMarket = () => {
                     assetIcon={token.data.underlying.icon}
                     assetName={token.data.underlying.symbol}
                     apy={token.borrowAPY.toFixed(2)}
-                    wallet={Number(formatBalance(token.balanceOf))}
+                    wallet={formatBalance(token.balanceOf)}
                     symbol={token.data.underlying.symbol}
                     liquidity={Number(token.liquidity)}
                     onToggle={() => {
@@ -558,12 +564,12 @@ const LendingMarket = () => {
                   />
                 ) : null
               )
-              .sort((a: any, b: any) => {
+              .sort((a, b) => {
                 return String(a?.props.symbol).localeCompare(b?.props.symbol);
               })
           ) : (
             <tr>
-              <td>loading</td>
+              <LoadingRow colSpan={4}>loading</LoadingRow>
             </tr>
           )}
         </LendingTable>
@@ -580,32 +586,23 @@ const LendingMarket = () => {
   //then we get the tokens from the getMarkets and set them to the state
   //and also generate stats about the token
   //and this only updates if the account changes (logs in or out)
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
-  let isMobile = dimensions.width < 1000;
 
   useEffect(() => {
-    function handleResize() {
-      setDimensions({
-        height: window.innerHeight,
-        width: window.innerWidth,
-      });
-    }
-    isMobile = dimensions.width < 1000;
+    setborrowBalance(stats?.totalBorrow?.toFixed(2) ?? "000.00");
+    setSupplyBalance(stats?.totalSupply?.toFixed(2) ?? "000.00");
+    ReactTooltip.rebuild();
 
-    window.addEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    setborrowBalance(stats?.totalBorrow.toFixed(2) ?? "000.00");
-    setSupplyBalance(stats?.totalSupply.toFixed(2) ?? "000.00");
     // console.log(stats?.totalBorrow.toFixed(6))
   }, [tokens]);
 
+  useEffect(() => {
+    ReactTooltip.rebuild();
+  });
+
   return (
     <Container className="lendingMarket">
+      <ReactTooltip id="foo" />
+
       <ModalManager
         isOpen={isOpen}
         modalType={modalType}
@@ -614,7 +611,7 @@ const LendingMarket = () => {
         }}
         data={walletBalance}
       />
-      <div style={{display: 'flex', justifyContent: "flex-end"}}>
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
         {networkInfo.isConnected ? (
           <Button
             onClick={() => {
@@ -622,14 +619,16 @@ const LendingMarket = () => {
                 openBalance();
               }
             }}
-            style={{width: "15rem", alignSelf: "right"}}
+            style={{ width: "15rem", alignSelf: "right" }}
           >
-            claim LM rewards 
+            claim LM rewards
           </Button>
         ) : null}
       </div>
-      <div style={{textAlign: "right"}}>
-          {stats?.balance?.accrued ? (Number(stats.balance.accrued)).toFixed(2) + " WCANTO " : ""}
+      <div style={{ textAlign: "right" }}>
+        {stats?.balance.accrued
+          ? Number(stats.balance.accrued).toFixed(2) + " WCANTO "
+          : ""}
       </div>
 
       <Hero>
@@ -695,31 +694,36 @@ const LendingMarket = () => {
                 }}
               ></div>
             </div>
-            <p style={{width: "100%", textAlign: 'right'}}>{noteSymbol + stats?.totalBorrowLimit.toFixed(2)}</p>
+            <p style={{ width: "100%", textAlign: "right" }}>
+              {noteSymbol + (stats?.totalBorrowLimit?.toFixed(2) ?? "000.00")}
+            </p>
           </TinyTable>
         }
         position="top center"
         on={["hover", "focus"]}
         arrow={true}
       >
-        <ToolTip>
+        <ToolTipL>
           {borrowPercentage < 80 ? (
             <p>
               you will be liquidated if you go above your borrow limit <br></br>
               Liquidity Cushion:{" "}
               {noteSymbol +
-                (stats?.totalBorrowLimit - stats?.totalBorrow).toFixed(2)}
+                (
+                  (stats?.totalBorrowLimit ?? 0) - (stats?.totalBorrow ?? 0)
+                ).toFixed(2)}
             </p>
           ) : (
             <p>
               you will be liquidated soon<br></br> Liquidity Cushion:{" "}
               {noteSymbol +
-                (stats?.totalBorrowLimit - stats?.totalBorrow).toFixed(2)}
+                (
+                  (stats?.totalBorrowLimit ?? 0) - (stats?.totalBorrow ?? 0)
+                ).toFixed(2)}
             </p>
           )}
-        </ToolTip>
+        </ToolTipL>
       </Popup>
-
 
       <SpecialTabs></SpecialTabs>
 
@@ -836,7 +840,8 @@ const LendingMarket = () => {
         </div>
       </div>
     </Container>
-)};
+  );
+};
 
 const SpecialTabs = () => {
   const TabBar = styled.div`

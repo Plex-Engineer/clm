@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { CantoMainnet, NodeAddresses } from "cantoui";
 import { ethers } from "ethers";
 
 export function addNetwork() {
-    console.log(window)
-    //@ts-ignore
+  console.log(window);
+  //@ts-ignore
   if (window.ethereum) {
     //@ts-ignore
     window?.ethereum
@@ -33,7 +34,7 @@ export async function getChainIdandAccount(): Promise<string[] | undefined[]> {
   //@ts-ignore
   if (window.ethereum) {
     //@ts-ignore
-    await window.ethereum.request({method: 'eth_requestAccounts'});
+    await window.ethereum.request({ method: "eth_requestAccounts" });
     //@ts-ignore
     return [window.ethereum.networkVersion, window.ethereum.selectedAddress];
   }
@@ -52,7 +53,7 @@ export async function getAccountBalance(account: string | undefined) {
   //@ts-ignore
   if (window.ethereum) {
     //@ts-ignore
-    let balance = await window.ethereum.request({
+    const balance = await window.ethereum.request({
       method: "eth_getBalance",
       params: [account, "latest"],
     });
