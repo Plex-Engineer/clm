@@ -127,11 +127,7 @@ const LendingSwitch = (props: Props) => {
   if (props.disabled) {
     return (
       <ToolTip data-tooltip="this asset cannot be collateralized">
-        <DisabledWrapper
-          className="switch"
-          data-tip="random text"
-          data-for="foo"
-        >
+        <DisabledWrapper className="switch" data-for="foo">
           <input type="checkbox" checked={props.checked} />
 
           <span className="slider"></span>
