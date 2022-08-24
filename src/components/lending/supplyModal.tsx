@@ -200,9 +200,7 @@ const SupplyModal = ({ onClose }: IProps) => {
   function ExpectedBorrowLimit(value: number) {
     const additionalBorrowLimit = token.collateralFactor * -value;
     const additionalBorrowLimitInNote = additionalBorrowLimit * token.price;
-    const totalExpectedBorrowLimit =
-      additionalBorrowLimitInNote + stats.totalBorrowLimit;
-    return totalExpectedBorrowLimit;
+    return additionalBorrowLimitInNote + stats.totalBorrowLimit;
   }
 
   //Hypothetical Borrow Limit Used If About to supply/withdraw

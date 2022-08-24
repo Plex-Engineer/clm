@@ -48,8 +48,7 @@ const Details = ({
       token.collateralFactor *
       (transactionType == TrasanctionType.SUPPLY ? amount : -amount);
     const additionalBorrowLimitInNote = additionalBorrowLimit * token.price;
-    const totalExpectedBorrowLimit = additionalBorrowLimitInNote + borrowLimit;
-    return totalExpectedBorrowLimit;
+    return additionalBorrowLimitInNote + borrowLimit;
   }
 
   //Hypothetical Borrow Limit Used If About to supply/withdraw

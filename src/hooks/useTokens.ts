@@ -28,16 +28,10 @@ export function useTokens(
   const secondsPerBlock = 5.8;
   const blocksPerDay = 86400 / secondsPerBlock;
   const daysPerYear = 365;
-  function getSupplyAPY(blockRate: number): number {
-    const supplyApy =
-      (Math.pow(Number(blockRate) * blocksPerDay + 1, daysPerYear) - 1) * 100;
-    return supplyApy;
-  }
-
-  function getBorrowAPY(blockRate: number): number {
-    const supplyApy =
-      (Math.pow(Number(blockRate) * blocksPerDay + 1, daysPerYear) - 1) * 100;
-    return supplyApy;
+  function getSupplyBorrowAPY(blockRate: number): number {
+    return (
+      (Math.pow(Number(blockRate) * blocksPerDay + 1, daysPerYear) - 1) * 100
+    );
   }
 
   function getDistributionAPY(
@@ -250,8 +244,12 @@ export function useTokens(
       const borrowBalanceinNote: string = (
         Number(borrowBalance) * Number(price)
       ).toFixed(18);
-      const supplyAPY = getSupplyAPY(Number(formatEther(tokenData[5][0])));
-      const borrowAPY = getBorrowAPY(Number(formatEther(tokenData[6][0])));
+      const supplyAPY = getSupplyBorrowAPY(
+        Number(formatEther(tokenData[5][0]))
+      );
+      const borrowAPY = getSupplyBorrowAPY(
+        Number(formatEther(tokenData[6][0]))
+      );
       const compSpeed = Number(formatEther(tokenData[11][0]));
       const distAPY = getDistributionAPY(
         compSpeed,

@@ -71,6 +71,7 @@ export function useSupplyEth(props: Details) {
 }
 
 export function useRepayEth(props: Details) {
+  const i = 0;
   return useSendTransaction({
     transactionName: JSON.stringify(props),
   });
