@@ -3,6 +3,7 @@ import { Contract } from "ethers";
 import { abi } from "constants/abi";
 import { ethers } from "ethers";
 import { CantoTestnet, ADDRESSES, TOKENS } from "cantoui";
+import { _getAmountOut } from "utils/balanceSheetFunctions";
 
 const formatUnits = ethers.utils.formatUnits;
 export interface BalanceSheetPriceObject {
@@ -157,12 +158,17 @@ export function useBalanceSheet(chainId: string | undefined) {
       results[7]?.value[0],
       tokens.NoteUSDC.decimals
     );
-    const USDCPrice = Number(NoteSupply3) / Number(USDCSupply3);
+    //how much you would get for 1 USDC
+    const USDCPrice = _getAmountOut(
+      1,
+      Number(results[6]?.value.reserveA.toString()),
+      Number(results[6]?.value.reserveB.toString())
+    );
     const noteUSDCPrice =
       (Number(NoteSupply3) + Number(USDCSupply3) * USDCPrice) /
       Number(totalLP3);
 
-    //NOTEUSDC
+    //NOTEUSDT
     const NoteSupply4 = formatUnits(
       results[8]?.value.reserveA,
       tokens.NOTE.decimals
@@ -175,7 +181,13 @@ export function useBalanceSheet(chainId: string | undefined) {
       results[9]?.value[0],
       tokens.NoteUSDT.decimals
     );
-    const USDTPrice = Number(NoteSupply4) / Number(USDTSUpply4);
+
+    //how much you would get for 1 USDT
+    const USDTPrice = _getAmountOut(
+      1,
+      Number(results[8]?.value.reserveA.toString()),
+      Number(results[8]?.value.reserveB.toString())
+    );
     const noteUSDTPrice =
       (Number(NoteSupply4) + Number(USDTSUpply4) * USDTPrice) /
       Number(totalLP4);

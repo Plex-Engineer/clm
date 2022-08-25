@@ -1,9 +1,4 @@
-import { ethers } from "ethers";
-import { LMToken } from "hooks/interfaces";
-import {
-  BalanceSheetPriceObject,
-  useBalanceSheet,
-} from "hooks/useBalanceSheet";
+import { useBalanceSheet } from "hooks/useBalanceSheet";
 import {
   BalanceSheetToken,
   useBalanceSheetData,
@@ -11,7 +6,7 @@ import {
 import { useTokens } from "hooks/useTokens";
 import { useNetworkInfo } from "stores/networkInfo";
 import { noteSymbol } from "utils";
-import { getPriceFromName, truncateNumber } from "utils/balanceSheetFunctions";
+import { truncateNumber } from "utils/balanceSheetFunctions";
 import LendingTable from "../components/lending/lendingTable";
 
 export const BalanceSheet = () => {
