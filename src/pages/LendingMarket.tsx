@@ -659,19 +659,19 @@ const LendingMarket = () => {
         trigger={
           <TinyTable>
             {/* <div className="tables">
-            <div className="table">
-              <h1>Assets</h1>
-              <p>{supplyBalance}</p>
-              <p>apy:23%</p>
-              <p>$37</p>
-            </div>
-            <div className="table alt">
-              <h1>Liabilities</h1>
-              <p>{borrowBalance}</p>
-              <p>apy:21%</p>
-              <p>$23</p>
-            </div>
-          </div> */}
+              <div className="table">
+                <h1>Assets</h1>
+                <p>{supplyBalance}</p>
+                <p>apy:23%</p>
+                <p>$37</p>
+              </div>
+              <div className="table alt">
+                <h1>Liabilities</h1>
+                <p>{borrowBalance}</p>
+                <p>apy:21%</p>
+                <p>$23</p>
+              </div>
+            </div> */}
             <div>
               <p>borrow limit</p>
             </div>
