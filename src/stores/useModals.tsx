@@ -1,4 +1,4 @@
-import { LMToken } from "hooks/interfaces";
+import { LMBalance, LMToken } from "hooks/interfaces";
 import create from "zustand";
 
 export enum ModalType {
@@ -20,6 +20,10 @@ interface ModalState {
   redirect: (modal: ModalType) => void;
   activeToken: LMToken | null;
   setActiveToken: (token: LMToken | null) => void;
+  tokens: LMToken[] | undefined;
+  setTokens: (tokens: LMToken[]) => void;
+  balance: LMBalance | undefined;
+  setBalance: (balance: LMBalance) => void;
 }
 const useModalStore = create<ModalState>((set, get) => ({
   currentModal: ModalType.NONE,
@@ -31,6 +35,10 @@ const useModalStore = create<ModalState>((set, get) => ({
   },
   activeToken: null,
   setActiveToken: (token) => set({ activeToken: token }),
+  tokens: undefined,
+  setTokens: (tokens) => set({ tokens }),
+  balance: undefined,
+  setBalance: (balance) => set({ balance }),
 }));
 
 export default useModalStore;

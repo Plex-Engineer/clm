@@ -280,6 +280,9 @@ const LendingMarket = () => {
                     onClick={() => {
                       setToken({ token: token, stats: stats });
                       modalStore.open(ModalType.LENDING);
+                      console.log(
+                        "🚀 ~ file: LendingMarket.tsx ~ line 283 ~ SupplyTable ~   modalStore.open(ModalType.LENDING);"
+                      );
                     }}
                     key={token.data.address + "supply"}
                     assetIcon={token.data.underlying.icon}
@@ -373,7 +376,7 @@ const LendingMarket = () => {
     ReactTooltip.rebuild();
 
     // console.log(stats?.totalBorrow.toFixed(6))
-  }, [tokens]);
+  }, [stats?.totalBorrow, stats?.totalSupply, tokens]);
 
   useEffect(() => {
     ReactTooltip.rebuild();
@@ -381,16 +384,7 @@ const LendingMarket = () => {
 
   return (
     <Container className="lendingMarket">
-      <ReactTooltip id="foo" />
-
-      <ModalManager
-        isOpen={modalStore.currentModal !== ModalType.NONE}
-        modalType={modalStore.currentModal}
-        onClose={() => {
-          modalStore.close();
-        }}
-        data={walletBalance}
-      />
+      <ModalManager isOpen={modalStore.currentModal != ModalType.NONE} />
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         {networkInfo.isConnected ? (
           <Button
@@ -636,7 +630,6 @@ const SpecialTabs = () => {
       cursor: pointer;
     }
   `;
-  const [showSupply, setShowSupply] = useState(true);
 
   return (
     <TabBar>

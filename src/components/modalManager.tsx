@@ -61,32 +61,29 @@ const StyledPopup = styled(Popup)`
 `;
 
 interface Props {
-  modalType: ModalType;
   isOpen: boolean;
-  onClose: () => void;
-  data?: any;
 }
 
-const ModalManager = (props: Props) => {
+const ModalManager = ({ isOpen }: Props) => {
   const modalStore = useModalStore();
 
   const tokenState = useToken();
-  if (props.isOpen && tokenState[0]) {
+  if (modalStore.currentModal !== ModalType.NONE && tokenState[0]) {
     Mixpanel.events.lendingMarketActions.modalInteraction(
       tokenState[0].token.wallet,
-      props.modalType.toString(),
+      modalStore.currentModal.toString(),
       tokenState[0].token.data.symbol,
       true
     );
   }
   return (
     <StyledPopup
-      open={props.isOpen}
+      open={isOpen}
       onClose={() => {
-        props.onClose();
+        modalStore.close();
         Mixpanel.events.lendingMarketActions.modalInteraction(
           "addd",
-          props.modalType.toString(),
+          modalStore.currentModal.toString(),
           "name",
           false
         );
@@ -107,29 +104,32 @@ const ModalManager = (props: Props) => {
           zIndex: "3",
         }}
         alt="close"
-        onClick={props.onClose}
+        onClick={modalStore.close}
       />
-      {/* <img className="close" src={close} alt="" /> */}
       {modalStore.currentModal === ModalType.WALLET_CONNECTION && (
-        <WalletModal onClose={props.onClose} />
+        <WalletModal onClose={modalStore.close} />
       )}
       {modalStore.currentModal === ModalType.LENDING && (
-        <SupplyModal onClose={props.onClose} />
+        <SupplyModal onClose={modalStore.close} />
       )}
 
       {modalStore.currentModal === ModalType.BORROW && (
-        <BorrowModal onClose={props.onClose} />
+        <BorrowModal onClose={modalStore.close} />
       )}
 
       {modalStore.currentModal === ModalType.COLLATERAL && (
-        <CollatModal onClose={props.onClose} />
+        <CollatModal onClose={modalStore.close} />
       )}
 
       {modalStore.currentModal === ModalType.DECOLLATERAL && (
-        <CollatModal onClose={props.onClose} decollateralize />
+        <CollatModal onClose={modalStore.close} decollateralize />
       )}
       {modalStore.currentModal === ModalType.BALANCE && (
-        <BalanceModal value={props.data} onClose={props.onClose} />
+        <BalanceModal
+          // passin LMBalance to this
+          value={modalStore.balance}
+          onClose={modalStore.close}
+        />
       )}
     </StyledPopup>
   );
