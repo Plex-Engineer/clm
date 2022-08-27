@@ -135,9 +135,13 @@ const LendingMarket = () => {
   const setToken = useSetToken();
 
   const allData = useTokens(networkInfo.account, Number(networkInfo.chainId));
-  const tokens = allData?.LMTokens;
+  modalStore.setTokens(allData?.LMTokens);
+  modalStore.setBalance(allData?.balances.balance);
+  modalStore.setStats(allData?.balances);
+
+  const tokens = modalStore.tokens;
   const stats = allData?.balances;
-  const walletBalance = stats?.balance;
+  const walletBalance = modalStore.balance;
 
   const borrowPercentage = stats?.totalBorrowLimitUsed
     ? (stats?.totalBorrowLimitUsed / (stats?.totalBorrowLimit ?? 0)) * 100
