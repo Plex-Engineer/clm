@@ -1,43 +1,36 @@
-import { BalanceSheetPriceObject } from "hooks/useBalanceSheet";
+import { BalanceSheetPriceObject, LPPriceObject } from "hooks/useBalanceSheet";
 
-export function getPriceFromName(
-  assetName: string,
-  priceObject: BalanceSheetPriceObject | undefined
-) {
+export function getPriceFromTokenAddress(
+  address: string,
+  priceObject: BalanceSheetPriceObject[] | undefined
+): number {
   if (!priceObject) {
     return 0;
   }
-  if (assetName == "CANTO") {
-    return priceObject.cantoPrice;
+  return (
+    priceObject.find((token) => token.tokenAddress == address)?.priceInNote ?? 0
+  );
+}
+
+interface TokensPerLP {
+  token1: number;
+  token2: number;
+}
+export function getTokensPerLP(
+  LPAddress: string,
+  LPPriceObject: LPPriceObject[] | undefined
+): TokensPerLP {
+  if (!LPPriceObject) {
+    return { token1: 0, token2: 0 };
   }
-  if (assetName == "ETH") {
-    return priceObject.ETHPrice;
+  const LPObject = LPPriceObject.find((token) => token.LPAddress == LPAddress);
+  if (LPObject) {
+    return {
+      token1: LPObject.token1.tokensPerLP,
+      token2: LPObject.token2.tokensPerLP,
+    };
   }
-  if (assetName == "USDC") {
-    return priceObject.USDCPrice;
-  }
-  if (assetName == "ATOM") {
-    return priceObject.ATOMPrice;
-  }
-  if (assetName == "USDT") {
-    return priceObject.USDTPrice;
-  }
-  if (assetName == "CantoAtomLP") {
-    return priceObject.cantoATOMPrice;
-  }
-  if (assetName == "CantoETHLP") {
-    return priceObject.cantoETHPrice;
-  }
-  if (assetName == "CantoNoteLP") {
-    return priceObject.cantoNotePrice;
-  }
-  if (assetName == "NoteUSDCLP") {
-    return priceObject.noteUSDCPrice;
-  }
-  if (assetName == "NoteUSDTLP") {
-    return priceObject.noteUSDTPrice;
-  }
-  return 1;
+  return { token1: 0, token2: 0 };
 }
 
 export function truncateNumber(value: string, decimals?: number) {
