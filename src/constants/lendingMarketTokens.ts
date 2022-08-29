@@ -29,7 +29,8 @@ export const mainnetBasecTokens = [
 ];
 
 export const mainnetTokens = [
-  TOKENS.cantoMainnet.WCANTO,
+  TOKENS.cantoMainnet.CANTO,
+  TOKENS.cantoMainnet.NOTE,
   TOKENS.cantoMainnet.ETH,
   TOKENS.cantoMainnet.ATOM,
   TOKENS.cantoMainnet.USDC,

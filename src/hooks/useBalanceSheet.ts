@@ -4,7 +4,7 @@ import { abi } from "constants/abi";
 import { ethers } from "ethers";
 import { CantoTestnet, ADDRESSES, TOKENS } from "cantoui";
 import { _getAmountOut } from "utils/balanceSheetFunctions";
-import { TokenPriceObject } from "./tokenPrices";
+import { TokenPriceObject } from "../pages/balanceSheet/tokenPrices";
 
 const formatUnits = ethers.utils.formatUnits;
 

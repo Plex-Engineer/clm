@@ -24,6 +24,17 @@ export interface TokenPriceObject {
 }
 
 export async function getTokenPrice(token: Token) {
+  if (token.address == TOKENS.cantoMainnet.NOTE.address) {
+    return {
+      name: token.name,
+      symbol: token.symbol,
+      address: token.address,
+      priceInNote: "1",
+    };
+  }
+  if (token.address == TOKENS.cantoMainnet.CANTO.address) {
+    token.address = TOKENS.cantoMainnet.WCANTO.address;
+  }
   const response = await fetch(
     slingShotAPI,
     createPostOptions(

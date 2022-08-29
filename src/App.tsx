@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 import React from "react";
 import { CantoNav } from "components/cantoNav";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { BalanceSheet } from "pages/BalanceSheet";
+import { BalanceSheet } from "pages/balanceSheet/BalanceSheet";
 
 //Styling
 

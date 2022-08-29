@@ -1,10 +1,7 @@
 import { MAINPAIRS } from "constants/pairs";
-import {
-  getPriceFromTokenAddress,
-  getTokensPerLP,
-} from "utils/balanceSheetFunctions";
+import { TokenPriceObject } from "pages/balanceSheet/tokenPrices";
+import { LPTokenInfo } from "pages/balanceSheet/useLPInfo";
 import { LMToken } from "./interfaces";
-import { BalanceSheetPriceObject, LPPriceObject } from "./useBalanceSheet";
 
 export interface BalanceSheetToken {
   icon: string;
@@ -33,15 +30,15 @@ export interface LPTokenData {
 
 export function useBalanceSheetData(
   tokens: LMToken[] | undefined,
-  priceObject: BalanceSheetPriceObject[] | undefined,
-  LPObject: LPPriceObject[] | undefined
+  priceObject: TokenPriceObject[] | undefined,
+  LPInfo: LPTokenInfo[] | undefined
 ): {
   assetTokens: BalanceSheetToken[];
   debtTokens: BalanceSheetToken[];
   LPTokens: LPTokenData[];
   totals: Totals;
 } {
-  if (!tokens) {
+  if (!tokens || !priceObject || !LPInfo) {
     return {
       assetTokens: [],
       debtTokens: [],
@@ -56,10 +53,14 @@ export function useBalanceSheetData(
   const LPTokens: LPTokenData[] = [];
 
   tokens?.map((token) => {
-    const price = getPriceFromTokenAddress(
-      token.data.underlying.address,
-      priceObject
-    );
+    const price = token.data.underlying.isLP
+      ? LPInfo?.find((lpToken) => {
+          return lpToken.LPAddress == token.data.underlying.address;
+        })?.priceInNote ?? 0
+      : priceObject?.find((priceToken) => {
+          return priceToken.address == token.data.underlying.address;
+        })?.priceInNote ?? 0;
+
     if (Number(token.balanceOf) != 0 || Number(token.balanceOfC) != 0) {
       const balanceOf = Number(token.supplyBalance) + Number(token.balanceOf);
       const balanceOfNote = balanceOf * Number(price);
@@ -91,23 +92,21 @@ export function useBalanceSheetData(
       );
       if (pair) {
         const LPAmount = Number(token.balanceOf) + Number(token.supplyBalance);
-        const tokensPerLP = getTokensPerLP(
-          token.data.underlying.address,
-          LPObject
-        );
-
+        const LPTokenData = LPInfo?.find((lpToken) => {
+          return lpToken.LPAddress == token.data.underlying.address;
+        });
         LPTokens.push({
           token1: {
             symbol: pair?.token1.symbol,
             icon: pair.token1.icon,
-            amount: LPAmount * tokensPerLP.token1,
+            amount: LPAmount * Number(LPTokenData?.token1.tokensPerLP),
           },
           token2: {
             symbol: pair?.token2.symbol,
             icon: pair.token2.icon,
-            amount: LPAmount * tokensPerLP.token2,
+            amount: LPAmount * Number(LPTokenData?.token2.tokensPerLP),
           },
-          value: price * LPAmount,
+          value: Number(price) * LPAmount,
         });
       }
     }

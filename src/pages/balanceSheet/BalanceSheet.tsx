@@ -1,30 +1,31 @@
 import { mainnetTokens } from "constants/lendingMarketTokens";
-import { getTokenPrice, TokenPriceObject } from "hooks/tokenPrices";
-import { useBalanceSheet } from "hooks/useBalanceSheet";
+import { MAINPAIRS } from "constants/pairs";
+import {
+  getTokenPrice,
+  TokenPriceObject,
+} from "pages/balanceSheet/tokenPrices";
 import {
   BalanceSheetToken,
   LPTokenData,
   useBalanceSheetData,
 } from "hooks/useBalanceSheetData";
+import { useLPInfo } from "pages/balanceSheet/useLPInfo";
 import { useTokens } from "hooks/useTokens";
 import { useEffect, useState } from "react";
 import { useNetworkInfo } from "stores/networkInfo";
 import styled from "styled-components";
 import { noteSymbol } from "utils";
 import { truncateNumber } from "utils/balanceSheetFunctions";
-import LendingTable from "../components/lending/lendingTable";
+import LendingTable from "../../components/lending/lendingTable";
 
 export const BalanceSheet = () => {
+  //get network info and token list
   const networkInfo = useNetworkInfo();
   const allData = useTokens(networkInfo.account, Number(networkInfo.chainId));
   const tokens = allData?.LMTokens;
-  const [tokenPrices, setTokenPrices] = useState<TokenPriceObject[]>([]);
-  const { priceObject, LPObject } = useBalanceSheet(
-    networkInfo.chainId,
-    tokenPrices
-  );
-  const columns = ["ticker", "balance (supply + wallet)", "value"];
 
+  //get base token prices used for pricing LP tokens
+  const [tokenPrices, setTokenPrices] = useState<TokenPriceObject[]>([]);
   async function setAllTokenPrices() {
     mainnetTokens.forEach(async (token) => {
       if (!tokenPrices.find((tokenObj) => tokenObj.address == token.address)) {
@@ -33,14 +34,20 @@ export const BalanceSheet = () => {
       }
     });
   }
+  //set the prices on load
   useEffect(() => {
     setAllTokenPrices();
   }, []);
 
+  //get LP token information, price + tokens per LP
+  const LPInfo = useLPInfo(networkInfo.chainId, tokenPrices, MAINPAIRS);
+
+  const columns = ["ticker", "balance (supply + wallet)", "value"];
+
   const { assetTokens, debtTokens, LPTokens, totals } = useBalanceSheetData(
     tokens,
-    priceObject,
-    LPObject
+    tokenPrices,
+    LPInfo
   );
   if (!tokens) {
     return <div></div>;
