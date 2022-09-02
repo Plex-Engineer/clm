@@ -34,7 +34,27 @@ export function getTokensPerLP(
 }
 
 export function truncateNumber(value: string, decimals?: number) {
-  const decimalLocation = value.indexOf(".");
+  let decimalLocation = value.indexOf(".");
+  const scientificEIndex = value.indexOf("e");
+  if (scientificEIndex != -1) {
+    const scientificNotationValue = value.slice(
+      scientificEIndex + 1,
+      value.length
+    );
+    if (scientificNotationValue[0] == "-") {
+      value =
+        "0." +
+        "0".repeat(
+          Number(scientificNotationValue.slice(1, value.length)) -
+            decimalLocation
+        ) +
+        value.slice(0, decimalLocation) +
+        value.slice(decimalLocation + 1, scientificEIndex);
+    }
+    //TODO for scientific notation positive
+  }
+  console.log(value);
+  decimalLocation = value.indexOf(".");
   if (Number(value) == 0) {
     return "0";
   }
