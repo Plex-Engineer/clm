@@ -6,6 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import React from "react";
 import { CantoNav } from "components/cantoNav";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BalanceSheet } from "pages/balanceSheet/BalanceSheet";
 
 //Styling
 
@@ -24,11 +26,16 @@ function App() {
   return (
     <React.Fragment>
       <ToastContainer />
-      <Container className="App">
-        <GlobalStyles />
-        <CantoNav />
-        <LendingMarket />
-      </Container>
+      <Router>
+        <Container className="App">
+          <GlobalStyles />
+          <CantoNav />
+          <Routes>
+            <Route path="/" element={<LendingMarket />} />
+            <Route path="/balanceSheet" element={<BalanceSheet />} />
+          </Routes>
+        </Container>
+      </Router>
     </React.Fragment>
   );
 }
