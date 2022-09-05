@@ -60,9 +60,35 @@ export const CantoNav = () => {
     });
   }
 
+  const pageList = [
+    {
+      name: "bridge",
+      link: "https://bridge.canto.io",
+    },
+    {
+      name: "convert coin",
+      link: "https://convert.canto.io",
+    },
+    {
+      name: "staking",
+      link: "https://staking.canto.io",
+    },
+    {
+      name: "lp interface",
+      link: "https://lp.canto.io",
+    },
+    {
+      name: "lending",
+      link: "https://lending.canto.io",
+    },
+    {
+      name: "governance",
+      link: "https://governance.canto.io",
+    },
+  ];
+
   return (
     <NavBar
-      title="lending"
       onClick={() => {
         activateBrowserWallet();
         addNetwork();
@@ -74,6 +100,7 @@ export const CantoNav = () => {
       currency={"CANTO"}
       logo={logo}
       currentPage="lending"
+      pageList={pageList}
     />
   );
 };
