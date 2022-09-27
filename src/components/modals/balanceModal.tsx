@@ -112,8 +112,9 @@ interface Props {
 const BalanceModal = ({ value, onClose }: Props) => {
   const { send: sendClaim, state: stateClaim } = useClaim(value.cantroller);
   const { send: sendDrip, state: stateDrip } = useDrip(reservoirAdddress);
+  console.log(value);
 
-  const mustDrip = Number(value.reservoirBalance) < Number(value.accrued);
+  const mustDrip = Number(value.comptrollerBalance) <= Number(value.accrued);
 
   useEffect(() => {
     // console.log(enterState)

@@ -159,7 +159,7 @@ export function useTokens(
     {
       contract: WCanto,
       method: "balanceOf",
-      args: [reservoirAdddress],
+      args: [comptroller.address],
     },
     {
       contract: comptroller,
@@ -335,7 +335,10 @@ export function useTokens(
     const cantoAccrued = formatEther(
       results[results.length - 2]?.value[0] ?? 1
     );
-    const reservoirBalance = formatEther(results[results.length - 3]?.value[0]);
+    const comptrollerBalance = formatEther(
+      results[results.length - 3]?.value[0]
+    );
+    console.log(results);
 
     const canto = LMTokens.find((item) => item.data.symbol == "cCANTO");
 
@@ -345,7 +348,7 @@ export function useTokens(
       accrued: totalRewards + Number(cantoAccrued),
       cantroller: address.Comptroller,
       wallet: account,
-      reservoirBalance,
+      comptrollerBalance,
     };
 
     const balances: LMTokenDetails = {
