@@ -4,7 +4,7 @@ import {
   useEthers,
 } from "@usedapp/core";
 import { Contract, utils } from "ethers";
-import { abi } from "constants/abi";
+import { abi, ReservoirAbi } from "constants/abi";
 import { TOKENS, CantoTestnet, ADDRESSES } from "cantoui";
 
 //Ex : DAI 50
@@ -160,6 +160,24 @@ export function useBorrow(props: Details) {
     "borrow",
     {
       transactionName: JSON.stringify(props),
+    }
+  );
+  return { state, send };
+}
+
+//function to call Drip in the reservoir so that rewards can always be claimed
+export function useDrip(address: string) {
+  const reservoirInterfacse = new utils.Interface(ReservoirAbi);
+  const { state, send } = useContractFunction(
+    new Contract(address, reservoirInterfacse),
+    "drip",
+    {
+      transactionName: JSON.stringify({
+        name: "WCANTO",
+        icon: TOKENS.cantoMainnet.WCANTO.icon,
+        amount: -1,
+        type: "dripped",
+      }),
     }
   );
   return { state, send };
