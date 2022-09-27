@@ -4,6 +4,7 @@ import { noteSymbol } from "utils";
 import { useClaim, useDrip } from "hooks/useTransaction";
 import { useEffect } from "react";
 import { reservoirAdddress } from "constants/lendingMarketTokens";
+import { Text } from "cantoui";
 const Container = styled.div`
   background-color: #040404;
   height: 36rem;
@@ -165,6 +166,12 @@ const BalanceModal = ({ value, onClose }: Props) => {
           {getStatus(stateClaim.status, mustDrip)}
         </Button>
       )}
+      {mustDrip ? (
+        <Text type="text">
+          wcanto must be dripped to ensure rewards can be claimed
+        </Text>
+      ) : null}
+      <br />
     </Container>
   );
 };
