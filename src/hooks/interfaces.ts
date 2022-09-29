@@ -58,4 +58,5 @@ export interface LMBalance {
   accrued: number;
   cantroller: string;
   wallet: string;
+  comptrollerBalance: string;
 }

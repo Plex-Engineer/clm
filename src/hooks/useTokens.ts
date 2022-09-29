@@ -1,10 +1,14 @@
 import { formatEther } from "@ethersproject/units";
 import { CallResult, useCalls, useEtherBalance } from "@usedapp/core";
 import { BigNumber, Contract } from "ethers";
-import { abi } from "constants/abi";
+import { abi, ReservoirAbi } from "constants/abi";
 import { ethers } from "ethers";
 import { CTOKENS, CTOKEN, CantoTestnet, ADDRESSES } from "cantoui";
-import { cTokensBase, mainnetBasecTokens } from "constants/lendingMarketTokens";
+import {
+  cTokensBase,
+  mainnetBasecTokens,
+  reservoirAdddress,
+} from "constants/lendingMarketTokens";
 import { LMBalance, LMToken, LMTokenDetails } from "./interfaces";
 
 const formatUnits = ethers.utils.formatUnits;
@@ -60,6 +64,7 @@ export function useTokens(
   const bal = formatEther(useEtherBalance(account) ?? 0);
   //comptroller contract
   const comptroller = new Contract(address?.Comptroller, abi.comptoller);
+  const WCanto = new Contract(address?.WCANTO, abi.Erc20);
   //canto contract
   const priceFeedContract = new Contract(address?.PriceFeed, abi.priceOracle);
   const calls =
@@ -152,6 +157,11 @@ export function useTokens(
   const globalCalls = [
     ...calls.flat(),
     {
+      contract: WCanto,
+      method: "balanceOf",
+      args: [comptroller.address],
+    },
+    {
       contract: comptroller,
       method: "compAccrued",
       args: [account],
@@ -168,7 +178,7 @@ export function useTokens(
   if (account == undefined) {
     return undefined;
   }
-  const chuckSize = !tokens ? 0 : (results.length - 2) / tokens.length;
+  const chuckSize = !tokens ? 0 : (results.length - 3) / tokens.length;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let processedTokens: Array<any>;
   const array_chunks = (
@@ -179,7 +189,7 @@ export function useTokens(
     const chunks = [];
 
     //array length minus 2, since we are ading the global functions that will increase the array size by 2
-    for (let i = 0; i < array.length - 2; i += chunk_size) {
+    for (let i = 0; i < array.length - 3; i += chunk_size) {
       chunks.push(rep.slice(i, i + chunk_size));
     }
     return chunks;
@@ -325,6 +335,10 @@ export function useTokens(
     const cantoAccrued = formatEther(
       results[results.length - 2]?.value[0] ?? 1
     );
+    const comptrollerBalance = formatEther(
+      results[results.length - 3]?.value[0]
+    );
+    console.log(results);
 
     const canto = LMTokens.find((item) => item.data.symbol == "cCANTO");
 
@@ -334,6 +348,7 @@ export function useTokens(
       accrued: totalRewards + Number(cantoAccrued),
       cantroller: address.Comptroller,
       wallet: account,
+      comptrollerBalance,
     };
 
     const balances: LMTokenDetails = {

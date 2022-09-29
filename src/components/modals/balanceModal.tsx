@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import logo from "assets/logo.svg";
 import { noteSymbol } from "utils";
-import { useClaim } from "hooks/useTransaction";
+import { useClaim, useDrip } from "hooks/useTransaction";
 import { useEffect } from "react";
+import { reservoirAdddress } from "constants/lendingMarketTokens";
+import { Text } from "cantoui";
 const Container = styled.div`
   background-color: #040404;
   height: 36rem;
@@ -109,14 +111,18 @@ interface Props {
   onClose: () => void;
 }
 const BalanceModal = ({ value, onClose }: Props) => {
-  const { send, state } = useClaim(value.cantroller);
+  const { send: sendClaim, state: stateClaim } = useClaim(value.cantroller);
+  const { send: sendDrip, state: stateDrip } = useDrip(reservoirAdddress);
+  console.log(value);
+
+  const mustDrip = Number(value.comptrollerBalance) <= Number(value.accrued);
 
   useEffect(() => {
     // console.log(enterState)
-    if (["Success", "Fail", "Exception"].includes(state.status)) {
+    if (["Success", "Fail", "Exception"].includes(stateClaim.status)) {
       setTimeout(onClose, 500);
     }
-  }, [state.status]);
+  }, [stateClaim.status]);
   return (
     <Container>
       <div className="title">canto balance</div>
@@ -149,21 +155,33 @@ const BalanceModal = ({ value, onClose }: Props) => {
       ) : (
         <Button
           onClick={() => {
-            if (state.status != "Mining" && state.status != "Success")
-              // console.log(value.wallet)
-              send(value.wallet);
+            if (stateClaim.status != "Mining" && stateClaim.status != "Success")
+              if (mustDrip) {
+                sendDrip();
+              }
+            // console.log(value.wallet)
+            sendClaim(value.wallet);
           }}
         >
-          {getStatus(state.status)}
+          {getStatus(stateClaim.status, mustDrip)}
         </Button>
       )}
+      {mustDrip ? (
+        <Text type="text">
+          wcanto must be dripped to ensure rewards can be claimed
+        </Text>
+      ) : null}
+      <br />
     </Container>
   );
 };
 
-function getStatus(status: string) {
+function getStatus(status: string, mustDrip: boolean) {
   switch (status) {
     case "None":
+      if (mustDrip) {
+        return "Drip and Claim";
+      }
       return "Claim";
     case "PendingSignature":
       return "Waiting for confirmation";
