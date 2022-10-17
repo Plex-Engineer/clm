@@ -95,7 +95,7 @@ export const CantoNav = () => {
       }}
       chainId={Number(netWorkInfo.chainId)}
       account={netWorkInfo.account ?? ""}
-      isConnected={netWorkInfo.isConnected && account ? true : false}
+      isConnected={!!account}
       balance={netWorkInfo.balance}
       currency={"CANTO"}
       logo={logo}
