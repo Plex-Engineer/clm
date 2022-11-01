@@ -72,7 +72,7 @@ contract CLMPriceOracle is PriceOracle {
 
     /// @param cToken, the cToken (treated as CErc20) that is being priced, in the case of cCanto, although it is not a cErc20 it is treated as such.
     /// @return price, the price of the asset in Note, scaled by 1e18
-    function getUnderlyingPrice(CToken cToken) external override view onlyComptroller(msg.sender) returns(uint) {
+    function getUnderlyingPrice(CToken cToken) external override view returns(uint) {
         address underlying;
         IBaseV1Router router_ = IBaseV1Router(router);
         // first check whether the cToken is cCanto
