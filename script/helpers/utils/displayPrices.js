@@ -11,18 +11,11 @@ async function main() {
   let cEth = await ethers.getContract("CETHDelegator");
   let cUsdc = await ethers.getContract("CUsdcDelegator");
   let cUsdt = await ethers.getContract("CUsdtDelegator");
-  const oracle = await ethers.getContract("CLMPriceOracle");
-  const CLMOracle = new ethers.Contract(
-    (await deployments.get("Unitroller")).address,
-    (await deployments.get("Comptroller")).abi,
-    dep
-  )
+  const oracle = await ethers.getContract("BaseV1Router01");
 
-console.log(await 
-  oracle.router())
   const cTokens = [cNote, cCanto, cAtom, cEth, cUsdc, cUsdt];
   for (var cToken of cTokens) {
-    await getPrice(await cToken.name(), cToken.address, CLMOracle, await cToken.decimals());
+    await getPrice(await cToken.name(), cToken.address, oracle, await cToken.decimals());
   }
 }
 async function getPrice(tokenName, cTokenAddress, oracle, decimals) {
