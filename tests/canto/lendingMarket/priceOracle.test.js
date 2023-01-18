@@ -1,8 +1,10 @@
+const { formatUnits } = require("@ethersproject/units");
 const { expect } = require("chai");
 const { ethers, deployments, getNamedAccounts } = require("hardhat");
 const {
   testAddresses,
 } = require("../../../script/helpers/utils/testAddresses.js");
+const { swapTokens, delay } = require("./utils.js");
 
 let dep;
 
@@ -11,11 +13,11 @@ let Router;
 let Note;
 let USDC;
 let USDT;
-let ATOM;
 let ETH;
 let WETH;
 let cCanto;
 let cUSDC;
+let cETH;
 
 describe("testing price oracle on CLM price oracle", async () => {
   before(async () => {
@@ -26,33 +28,25 @@ describe("testing price oracle on CLM price oracle", async () => {
       dep
     );
     Router = await ethers.getContract("BaseV1Router01");
-    CLMPriceOracle = await ethers.getContractAt("CLMPriceOracle", "0xcf9A1B83eAF8E9333AEf2C69d5aA220FcAC60D6e")
+    CLMPriceOracle = await ethers.getContractAt(
+      "CLMPriceOracle",
+      "0x6eF2D560C4f05AeA5Eb968b12214CDB368c531D0"
+    );
     ETH = await ethers.getContractAt("ERC20", testAddresses.ETH);
     WETH = await ethers.getContract("WETH");
-
     USDC = await ethers.getContractAt("ERC20", testAddresses.USDC);
     USDT = await ethers.getContractAt("ERC20", testAddresses.USDT);
     cCanto = await ethers.getContract("CCanto");
     Note = await ethers.getContract("Note");
     cUSDC = await ethers.getContract("CUsdcDelegator");
-
-
+    cETH = await ethers.getContract("CETHDelegator");
   });
-  it("set canto price oracle", async () => {
-    const CLMPriceOracelFactory = await ethers.getContractFactory(
-      "CLMPriceOracle"
-    );
-    const CLMPriceOracles = await CLMPriceOracelFactory.deploy(
-      Comptroller.address,
-      Router.address,
-      USDC.address,
-      USDT.address,
-      Note.address,
-      WETH.address,
-      cCanto.address
-    );
-    await (await Comptroller._setPriceOracle(CLMPriceOracles.address)).wait();
-    console.log(CLMPriceOracles.address)
-    console.log(await CLMPriceOracles.getUnderlyingPrice(cUSDC.address))
-  });
+  it("testing price of ERC20 token", async () => {
+    const [cantoReserve, ETHReserve] = await Router.getReserves(WETH.address, ETH.address, false);
+    await swapTokens(WETH, ETH, Router, dep, false, "500")
+    console.log(cantoReserve, ETHReserve)
+    console.log(formatUnits(await CLMPriceOracle.getUnderlyingPrice(cETH.address)).toString())
+    console.log(formatUnits(await CLMPriceOracle.getUnderlyingPrice(cCanto.address)).toString())
+
+});
 });
