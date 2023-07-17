@@ -41,22 +41,22 @@ async function main() {
   await (await BaseV1Factory.setPeriodSize(0)).wait();
 
   //supply tokens in market
-  await supplyToken(Unitroller, USDC, cUsdc, parseUnits("30000000", 6));
-  await supplyToken(Unitroller, USDT, cUsdt, parseUnits("30000000", 6));
+  await supplyToken(Unitroller, USDC, cUsdc, parseUnits("50000000", 6));
+  await supplyToken(Unitroller, USDT, cUsdt, parseUnits("50000000", 6));
 
-  await (await cNote.borrow(parseUnits("30000000", "18"))).wait();
+  await (await cNote.borrow(parseUnits("50000000", "18"))).wait();
   console.log("borrow complete");
   // Add liquidity
   await (
-    await WCANTO.deposit({ value: ethers.utils.parseUnits("100001000", "18") })
+    await WCANTO.deposit({ value: ethers.utils.parseUnits("42000000", "18") })
   ).wait();
-  await addLiquidity(Note, WCANTO, router, deployerAddress, false, "4500000", "45000000");
-  await addLiquidity(ETH, WCANTO, router, deployerAddress,false, "2500", "25000000");
-  await addLiquidity(WCANTO, ATOM, router, deployerAddress, false, "20000000", "200000");
+  await addLiquidity(Note, WCANTO, router, deployerAddress, false, "10000000", "20000000");
+  await addLiquidity(ETH, WCANTO, router, deployerAddress,false, "2500", "10000000");
+  await addLiquidity(WCANTO, ATOM, router, deployerAddress, false, "10000000", "500000");
   await addLiquidity(Note, USDC, router, deployerAddress, true, "15000000", "15000000");
-  await addLiquidity(Note, USDT, router, deployerAddress, true, "10000000", "10000000");
+  await addLiquidity(Note, USDT, router, deployerAddress, true, "15000000", "15000000");
   await ((await BaseV1Factory.setPeriodSize(0)).wait());
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 15; i++) {
     await swapTokens(Note, WCANTO, router, deployerAddress, false, "1");
     await swapTokens(ETH, WCANTO, router, deployerAddress, false, "0.01");
     await swapTokens(ATOM, WCANTO, router, deployerAddress, false, "0.1");

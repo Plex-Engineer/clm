@@ -8,10 +8,10 @@ import {canto} from "../../config/index.js";
 // const ATOM_ADDRESS = "0x5FD55A1B9FC24967C4dB09C513C3BA0DFa7FF687"
 // const USDT_ADDRESS = "0xd567B3d7B8FE3C79a1AD8dA978812cfC4Fa05e75"
 
-const USDC_ADDRESS = "0x4307953845Dc771364F2E92F3bECCe22188ea3b2"
-const ETH_ADDRESS = "0x9996B34223FE88d59CcF8Bd1DfA7c9D7F02D42F7"
-const ATOM_ADDRESS = "0x637490E68AA50Ea810688a52D7464E10c25A77c1"
-const USDT_ADDRESS = "0x210b88d5Ad4BEbc8FAC4383cC7F84Cd4F03d18c6"
+const USDC_ADDRESS = "0xc51534568489f47949A828C8e3BF68463bdF3566"
+const ETH_ADDRESS = "0xCa03230E7FB13456326a234443aAd111AC96410A"
+const ATOM_ADDRESS = "0x40E41DC5845619E7Ba73957449b31DFbfB9678b2"
+const USDT_ADDRESS = "0x4fC30060226c45D8948718C95a78dFB237e88b40"
 
 const func: DeployFunction = async function(hre: HardhatRuntimeEnvironment) {
     const {ethers, deployments, getNamedAccounts} = hre;
@@ -55,8 +55,8 @@ const func: DeployFunction = async function(hre: HardhatRuntimeEnvironment) {
     let cantoAtomAddr = await read(`BaseV1Factory`, `getPair`, weth.address, ATOM_ADDRESS, false)
     
     console.log("note/canto pair address: ", noteCantoAddr)
-    console.log("note/usdt pair address: ", noteUSDCAddr)
-    console.log("note/usdc pair address: ", noteUSDTAddr)
+    console.log("note/usdc pair address: ", noteUSDCAddr)
+    console.log("note/usdt pair address: ", noteUSDTAddr)
     console.log("canto/eth pair address: ", cantoETHAddr)
     console.log("canto/atom pair address: ", cantoAtomAddr)
 

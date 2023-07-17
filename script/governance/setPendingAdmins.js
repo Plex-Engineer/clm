@@ -4,6 +4,7 @@ const { testAddresses } = require("../helpers/utils/testAddresses.js");
 async function main() {
   const [dep] = await ethers.getSigners();
   const timelock = await ethers.getContract("Timelock");
+  console.log(timelock.address)
   const treasury = await ethers.getContractAt(
     "TreasuryDelegate",
     testAddresses.TreasuryDelegator
@@ -32,27 +33,26 @@ async function main() {
   const cNoteUsdt = await ethers.getContract("CNoteUsdtDelegator");
   const cNoteUsdc = await ethers.getContract("CNoteUsdcDelegator");
 
-  const allContractsToSetAdmin = [
-    treasury,
-    accountant,
-    governorBravo,
-    unitroller,
-    cNote,
-    cCanto,
-    cAtom,
-    cEth,
-    cUsdc,
-    cUsdt,
-    cCantoNote,
-    cCantoEth,
-    cCantoAtom,
-    cNoteUsdt,
-    cNoteUsdc,
-  ];
-  for (let contract of allContractsToSetAdmin) {
-    await (await contract._setPendingAdmin(timelock.address)).wait();
-    console.log("done")
-  }
+    const allContractsToSetAdmin = [
+      treasury,
+      accountant,
+      governorBravo,
+      unitroller,
+      cNote,
+      cCanto,
+      cAtom,
+      cEth,
+      cUsdc,
+      cUsdt,
+      cCantoNote,
+      cCantoEth,
+      cCantoAtom,
+      cNoteUsdt,
+      cNoteUsdc,
+    ];
+    for (let contract of allContractsToSetAdmin) {
+      await (await contract._setPendingAdmin(timelock.address)).wait();
+    }
 }
 
 main()

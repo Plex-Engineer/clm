@@ -8,10 +8,10 @@ async function deployERC20(name, symbol, initialSupply, decimals) {
     console.log(name + ": " + ERC20Contract.address);
 }
 async function main() {
-    await deployERC20("USDC", "USDC", parseUnits("1000000000000", 6), 6);
-    await deployERC20("USDT", "USDT", parseUnits("1000000000000", 6), 6);
-    await deployERC20("ATOM", "ATOM", parseUnits("1000000000000", 6), 6);
-    await deployERC20("ETH", "ETH", parseUnits("1000000000000", 18), 18);
+    await deployERC20("USDC", "USDC", parseUnits("1000000000000000", 6), 6);
+    await deployERC20("USDT", "USDT", parseUnits("1000000000000000", 6), 6);
+    await deployERC20("ATOM", "ATOM", parseUnits("1000000000000000", 6), 6);
+    await deployERC20("ETH", "ETH", parseUnits("1000000000000000", 18), 18);
 }
 main()
 .then(() => process.exit(0))
