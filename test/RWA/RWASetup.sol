@@ -4,7 +4,7 @@ import "forge-std/Test.sol";
 import {Helpers, NoteRateModel, CToken, CNote, CErc20} from "../utils.sol";
 import "src/Comptroller.sol";
 import "src/ERC20.sol";
-import {CRWAToken} from "src/RWA/CRWAToken.sol";
+import {CRWA} from "src/RWA/CRWA.sol";
 import "src/CErc20Delegator.sol";
 import "src/WETH.sol";
 import "src/Note.sol";
@@ -14,7 +14,7 @@ import "src/Treasury/TreasuryDelegate.sol";
 import "src/Treasury/TreasuryDelegator.sol";
 import "src/Swap/BaseV1-core.sol";
 import "../helpers/TestOracle.sol";
-import {RWACErc20} from "src/RWA/CErc20_RWA.sol";
+import {CErc20_RWA} from "src/RWA/CErc20_RWA.sol";
 import "../helpers/TestWhitelist.sol";
 import {TestRWAOracle} from "../helpers/TestRWAOracle.sol";
 
@@ -28,7 +28,7 @@ contract RWASetup is Test {
     AccountantDelegator accountant;
 
     ERC20 rwaUnderlying;
-    RWACErc20 rwaCToken;
+    CErc20_RWA rwaCToken;
 
     Note note;
     CNote cNote;
@@ -150,7 +150,7 @@ contract RWASetup is Test {
         // set up comptroller and unitroller and set to local comptroller
         setUpComptroller();
 
-        rwaCToken = new CRWAToken();
+        rwaCToken = new CRWA();
         rwaUnderlying = new ERC20(
             "RWA Underlying",
             "RWA",
@@ -158,7 +158,7 @@ contract RWASetup is Test {
             18
         );
 
-        rwaCToken = CRWAToken(
+        rwaCToken = CRWA(
             address(
                 new CErc20Delegator(
                     address(rwaUnderlying),
@@ -177,7 +177,7 @@ contract RWASetup is Test {
 
         //set up RWAPriceOracle
         TestRWAOracle rwaOracle = new TestRWAOracle();
-        CRWAToken(address(rwaCToken)).setPriceOracle(address(rwaOracle));
+        CRWA(address(rwaCToken)).setPriceOracle(address(rwaOracle));
 
         //init contracts for router (oracle)
         BaseV1Factory factory = new BaseV1Factory();
@@ -186,7 +186,7 @@ contract RWASetup is Test {
 
         // deploy whitelist and set in rwaCToken
         whitelist = new TestWhitelist();
-        CRWAToken(address(rwaCToken)).setWhitelist(address(whitelist));
+        CRWA(address(rwaCToken)).setWhitelist(address(whitelist));
 
         // deploy and set up note
         deployAndSetUpCNote();

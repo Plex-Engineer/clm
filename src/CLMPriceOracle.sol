@@ -6,7 +6,7 @@ import {IBaseV1Pair} from "src/Swap/BaseV1-periphery.sol";
 import {erc20, Math} from "src/Swap/BaseV1-libs.sol";
 import {CToken} from "src/CToken.sol";
 import {IRWAPriceOracle} from "src/RWA/IRWAPriceOracle.sol";
-import {CRWAToken} from "src/RWA/CRWAToken.sol";
+import {CRWA} from "src/RWA/CRWA.sol";
 
 pragma solidity 0.8.11;
 
@@ -102,7 +102,7 @@ contract CLMPriceOracle is PriceOracle {
         // first check if this is a rwaCToken
         if (isRWACToken(address(cToken))) {
             // return price from rwa oracle
-            (,int256 answer,,,) = IRWAPriceOracle(CRWAToken(address(cToken)).priceOracle()).latestRoundData();
+            (,int256 answer,,,) = IRWAPriceOracle(CRWA(address(cToken)).priceOracle()).latestRoundData();
             return uint(answer);
         }
         // check whether the cToken is cCanto

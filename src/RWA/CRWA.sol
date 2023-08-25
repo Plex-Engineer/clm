@@ -5,7 +5,7 @@ import "./CErc20Delegate_RWA.sol";
 import "./IWhitelist.sol";
 import "./IRWAPriceOracle.sol";
 
-contract CRWAToken is RWACErc20Delegate {
+contract CRWA is CErc20Delegate_RWA {
     error NoCRWATranfer();
     error NotWhitelisted(address account);
 

@@ -90,7 +90,7 @@ contract RWALiquidationTest is RWASetup, ExponentialNoError {
         // attempt to liquidate with non-whitelisted account
         vm.expectRevert(
             abi.encodeWithSelector(
-                CRWAToken.NotWhitelisted.selector,
+                CRWA.NotWhitelisted.selector,
                 nonWhiteListedAccount
             )
         );

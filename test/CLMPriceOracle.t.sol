@@ -4,7 +4,7 @@ import "./utils.sol";
 import {CLMPriceOracle} from "./CLMPriceOracle.sol";
 import "forge-std/Test.sol";
 import {TestOracle} from "./helpers/TestOracle.sol";
-import {CRWAToken} from "src/RWA/CRWAToken.sol";
+import {CRWA} from "src/RWA/CRWA.sol";
 import {TestRWAOracle} from "./helpers/TestRWAOracle.sol";
 
 contract CLMPriceOracleTest is Test, Helpers {
@@ -18,9 +18,9 @@ contract CLMPriceOracleTest is Test, Helpers {
     ERC20Test public usdt;
     CLMPriceOracle public priceOracle;
     BaseV1Factory public factory;
-    CRWAToken public rwaCToken;
+    CRWA public rwaCToken;
     // rwa cToken not added to oracle
-    CRWAToken public rwaCTokenUnadded;
+    CRWA public rwaCTokenUnadded;
 
     function setUp() public {
         vm.startPrank(admin);
@@ -39,9 +39,9 @@ contract CLMPriceOracleTest is Test, Helpers {
         usdt = new ERC20Test("usdt", "usdt", 0, 6);
 
         // deploy rwacToken to place into oracle
-        rwaCToken = new CRWAToken();
+        rwaCToken = new CRWA();
         ERC20 rwaUnderlying = new ERC20("rwa", "rwa", 0, 18);
-        rwaCToken = CRWAToken(
+        rwaCToken = CRWA(
             address(
                 new CErc20Delegator(
                     address(rwaUnderlying),
@@ -62,11 +62,11 @@ contract CLMPriceOracleTest is Test, Helpers {
 
         //set up RWAPriceOracle
         TestRWAOracle rwaOracle = new TestRWAOracle();
-        CRWAToken(address(rwaCToken)).setPriceOracle(address(rwaOracle));
+        CRWA(address(rwaCToken)).setPriceOracle(address(rwaOracle));
 
-        rwaCTokenUnadded = new CRWAToken();
+        rwaCTokenUnadded = new CRWA();
         // deploy other cToken to not place into oracle
-        rwaCTokenUnadded = CRWAToken(
+        rwaCTokenUnadded = CRWA(
             address(
                 new CErc20Delegator(
                     address(rwaUnderlying),
