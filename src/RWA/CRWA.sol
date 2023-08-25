@@ -19,10 +19,7 @@ contract CRWA is CErc20Delegate_RWA {
      * @param   _whitelist  New address of whitelist contract
      */
     function setWhitelist(address _whitelist) external {
-        require(
-            msg.sender == admin,
-            "CRWAToken::setWhitelist: only admin can set whitelist"
-        );
+        require(msg.sender == admin, "CRWAToken::setWhitelist: only admin can set whitelist");
         whitelist = _whitelist;
     }
 
@@ -31,10 +28,7 @@ contract CRWA is CErc20Delegate_RWA {
      * @param   _oracle  New address of price oracle contract
      */
     function setPriceOracle(address _oracle) external {
-        require(
-            msg.sender == admin,
-            "CRWAToken::setPriceOracle: only admin can set price oracle"
-        );
+        require(msg.sender == admin, "CRWAToken::setPriceOracle: only admin can set price oracle");
         priceOracle = _oracle;
     }
 
@@ -43,12 +37,7 @@ contract CRWA is CErc20Delegate_RWA {
      * @dev     Any type of transfer (except liquidations) will revert
      * @return  uint  For legacy reasons, will always revert
      */
-    function transferTokens(
-        address /*spender*/,
-        address /*src*/,
-        address /*dst*/,
-        uint /*tokens*/
-    ) internal pure override returns (uint) {
+    function transferTokens(address /*spender*/, address /*src*/, address /*dst*/, uint /*tokens*/) internal pure override returns (uint) {
         revert NoCRWATranfer();
     }
 
@@ -60,37 +49,20 @@ contract CRWA is CErc20Delegate_RWA {
      * @param   borrower  Address of borrower
      * @param   seizeTokens  Amount of tokens to seize
      */
-    function seizeInternal(
-        address seizerToken,
-        address liquidator,
-        address borrower,
-        uint seizeTokens
-    ) internal override {
+    function seizeInternal(address seizerToken, address liquidator, address borrower, uint seizeTokens) internal override {
         // check whitelist
-        require(
-            whitelist != address(0),
-            "CRWAToken::seizeInternal: whitelist not set"
-        );
+        require(whitelist != address(0),"CRWAToken::seizeInternal: whitelist not set");
         if (!IWhitelist(whitelist).isWhitelistedReceiver(liquidator)) {
             revert NotWhitelisted(liquidator);
         }
 
         // check liquidation amount
-        require(
-            priceOracle != address(0),
-            "CRWAToken::seizeInternal: price oracle not set"
-        );
+        require(priceOracle != address(0), "CRWAToken::seizeInternal: price oracle not set");
         (, int answer, , , ) = IRWAPriceOracle(priceOracle).latestRoundData();
 
         // divide total by 10^(18 + decimals) to get USD value
-        uint liquidationAmountUSD = div_(
-            mul_(seizeTokens, uint(answer)),
-            10 ** (this.decimals() + 18)
-        );
-        require(
-            liquidationAmountUSD >= MINIMUM_LIQUIDATION_USD,
-            "CRWAToken::seizeInternal: liquidation amount below minimum"
-        );
+        uint liquidationAmountUSD = div_(mul_(seizeTokens, uint(answer)), 10 ** (this.decimals() + 18));
+        require(liquidationAmountUSD >= MINIMUM_LIQUIDATION_USD, "CRWAToken::seizeInternal: liquidation amount below minimum");
 
         // continue and call normal seizeInternal function
         super.seizeInternal(seizerToken, liquidator, borrower, seizeTokens);
