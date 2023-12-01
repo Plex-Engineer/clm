@@ -9,3 +9,9 @@ task(
   "Deploy CLM Oracle contract",
   require("./deployCLMOracle")
 );
+
+task(
+  "setComptrollerProps",
+  "Set comptroller props",
+  require("./setComptrollerProps")
+);
