@@ -165,6 +165,9 @@ contract NoteRateModel is InterestRateModel{
             } else { 
                 // note is under-performing the dollar, defer to suppliers: increase the supply rate (have users swap usdc for note to supply it)
                 newBaseRatePerYear = interestAdjust + baseRatePerYear; 
+                if (newBaseRatePerYear >  50000000000000000) { // 5% cap
+                    newBaseRatePerYear = 50000000000000000; 
+                }
             }
 
             baseRatePerYear = newBaseRatePerYear;
